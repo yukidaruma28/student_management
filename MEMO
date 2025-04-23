@@ -1,0 +1,46 @@
+仕様
+  受講生情報の定義
+    ID
+      id
+    名前（フルネーム）
+      full_name
+    フリガナ
+      furigana
+    ニックネーム
+      nickname
+    メールアドレス
+      email
+    住んでいる地域（市区町村）
+      city_name
+    年齢
+      age
+    性別（トランスジェンダー考慮）
+      gender
+        https://qiita.com/aoshirobo/items/32deb45cb8c8b87d65a4
+
+
+  受講生コース情報の定義
+    ID
+      students_courses_id
+    受講生情報のID
+      id
+    コース名
+      select_courses
+    受講開始日　→　日付型
+      start_date
+    受講終了予定日　→　日付型
+      end_date
+
+  DB設計
+    テーブル構成
+    受講生
+    受講生コース
+
+  ※受講生と受講生コースは関連有り
+  → 1:Nの関係
+
+課題：受講生情報と受講生コース情報のテーブルを作ってみてください
+
+受講生情報：students
+受講生コース情報：students_courses
+
