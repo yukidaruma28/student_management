@@ -20,7 +20,8 @@ public class TestDemoApplication {
 	private StudentRepository repository;
 
 
-
+	// 初めてのブランチ作成をしました
+	// プルリクエストができているかドキドキです！！
 	public static void main(String[] args) {
 		SpringApplication.run(TestDemoApplication.class, args);
 	}
