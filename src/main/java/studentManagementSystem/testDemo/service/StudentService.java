@@ -19,39 +19,43 @@ public class StudentService {
     return repository.searchStudent();
   }
 
-  public List<Integer> getStudentId() {
+  public List<Integer> searchStudentId() {
     return repository.searchStudentId();
   }
 
   public Student getStudentId(@PathVariable int id) {
-    return repository.findStudentId(id);
+    return repository.searchStudentById(id);
   }
 
-  public List<String> getStudentName() {
+  public Student searchStudentById(int id) {
+    return repository.searchStudentById(id);
+  }
+
+  public List<String> searchStudentName() {
     return repository.searchStudentName();
   }
 
-  public List<String> getStudentFurigana() {
+  public List<String> searchStudentFurigana() {
     return repository.searchStudentFurigana();
   }
 
-  public List<String> getStudentNickname() {
+  public List<String> searchStudentNickname() {
     return repository.searchStudentNickname();
   }
 
-  public List<String> getStudentEmail() {
+  public List<String> searchStudentEmail() {
     return repository.searchStudentEmail();
   }
 
-  public List<String> getStudentArea() {
+  public List<String> searchStudentArea() {
     return repository.searchStudentArea();
   }
 
-  public List<String> getStudentAge() {
+  public List<String> searchStudentAge() {
     return repository.searchStudentAge();
   }
 
-  public List<String> getStudentGender() {
+  public List<String> searchStudentGender() {
     return repository.searchStudentGender();
   }
 
@@ -59,4 +63,6 @@ public class StudentService {
   public List<StudentsCourses> searchStudentsCoursessList() {
     return repository.searchStudentsCourses();
   }
+
+
 }

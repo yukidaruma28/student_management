@@ -24,6 +24,10 @@ public interface StudentRepository {
   @Select("SELECT * FROM student WHERE id = #{id}")
   Student findStudentId(int id); // ここのStudentはStudentの中身を全部返す意味
 
+  @Select("SELECT * FROM student WHERE id = #{id}")
+  Student searchStudentById(int id); // ここのStudentはStudentの中身を全部返す意味
+
+
   // 名前全件取得
   @Select("SELECT name FROM student")
   List<String> searchStudentName();
