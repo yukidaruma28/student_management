@@ -1,12 +1,13 @@
-package studentManagementSystem.testDemo;
+package studentManagementSystem.testDemo.repository;
 
 // これはSQLを実行するためのインターフェースという考え方
 // Webの世界から検索や登録をするインターフェース
 
-import java.util.Arrays;
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import studentManagementSystem.testDemo.data.Student;
+import studentManagementSystem.testDemo.data.StudentsCourses;
 
 @Mapper
 public interface StudentRepository {

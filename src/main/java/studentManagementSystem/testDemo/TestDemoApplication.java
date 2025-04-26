@@ -8,17 +8,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+import studentManagementSystem.testDemo.data.Student;
+import studentManagementSystem.testDemo.data.StudentsCourses;
+import studentManagementSystem.testDemo.repository.StudentRepository;
 
 
 @SpringBootApplication
-@RestController
 @MapperScan("studentManagementSystem.testDemo")
 
 public class TestDemoApplication {
-
-	@Autowired
-	private StudentRepository repository;
-
 
 	// 初めてのブランチ作成をしました
 	// プルリクエストができているかドキドキです！！
