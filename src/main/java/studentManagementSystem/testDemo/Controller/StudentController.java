@@ -1,30 +1,41 @@
 package studentManagementSystem.testDemo.Controller;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+import studentManagementSystem.testDemo.Controller.converter.StudentConverter;
 import studentManagementSystem.testDemo.data.Student;
 import studentManagementSystem.testDemo.data.StudentsCourses;
+import studentManagementSystem.testDemo.domain.StudentDetail;
 import studentManagementSystem.testDemo.service.StudentService;
 
 @RestController
 public class StudentController {
 
-  @Autowired
-  public StudentController(StudentService service) {
-    this.service = service;
-  }
-
   private StudentService service;
+  private StudentConverter converter;
+
+  @Autowired
+  public StudentController(StudentService service, StudentConverter converter) {
+    this.service = service;
+    this.converter = converter;
+  }
 
   // 全件取得
   @GetMapping("/studentList")
-  public List<Student> getStudentList() {
-    return service.searchStudentList();
+  public List<StudentDetail> getStudentList() {
+    List<Student> students = service.searchStudentList();
+    List<StudentsCourses> studentsCourses = service.searchStudentsCoursesList();
+
+    return converter.convertStudentDetails(students, studentsCourses);
   }
+
+
 
   // ID全件取得
   @GetMapping("/studentId")

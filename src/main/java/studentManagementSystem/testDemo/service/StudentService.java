@@ -19,7 +19,6 @@ public class StudentService {
   }
 
   public List<Student> searchStudentList() {
-    // 検索処理 Repositoryの情報をServiceで使えるように、studentListという変数につめた
     List<Student> studentList = repository.searchStudent();
 
     // 課題① 24_Read処理のServiceとController部分を実装
@@ -31,6 +30,20 @@ public class StudentService {
 
     return filteredList;
   }
+
+//  public List<Student> searchStudentList() {
+//    // 検索処理 Repositoryの情報をServiceで使えるように、studentListという変数につめた
+//    List<Student> studentList = repository.searchStudent();
+//
+//    // 課題① 24_Read処理のServiceとController部分を実装
+//    // 絞り込みを行う。年齢が30代の人のみを抽出する。
+//    // 抽出したリストをControllerに返す。
+//    List<Student> filteredList = studentList.stream()
+//        .filter(i -> i.getAge() >= 30 && i.getAge() <= 39)
+//        .toList();
+//
+//    return filteredList;
+//  }
 
   public List<Integer> searchStudentId() {
     return repository.searchStudentId();
@@ -72,24 +85,28 @@ public class StudentService {
     return repository.searchStudentGender();
   }
 
-//  //課題②のために、コメントアウト
-//  public List<StudentsCourses> searchStudentsCoursesList() {
-//    return repository.searchStudentsCourses();
-//  }
+  public List<StudentsCourses> searchStudentsCoursesList() {
+    return repository.searchStudentsCoursesList();
+  }
 
   public List<StudentsCourses> searchStudentsCoursessList() {
-    // 課題② 24_Read処理のServiceとController部分を実装
-    // 絞り込み検索で「Java基礎コース」のコース情報のみを抽出する。
-    // 抽出したリストをControllerに返す。
-
-    // 検索処理 Repositoryの情報をServiceで使えるように、searchStudentsCoursesという変数につめた
-    List<StudentsCourses> searchStudentsCourses = repository.searchStudentsCourses();
-
-    // 絞り込み処理
-    List<StudentsCourses> filteredStudentsCourses = searchStudentsCourses.stream()
-        .filter(i -> i.getCourseName().contains("Java基礎コース"))
-        .toList();
-
-    return filteredStudentsCourses;
+    return repository.searchStudentsCoursesList();
   }
+
+//課題②のために、コメントアウト
+//  public List<StudentsCourses> searchStudentsCoursesList() {
+//    // 課題② 24_Read処理のServiceとController部分を実装
+//    // 絞り込み検索で「Java基礎コース」のコース情報のみを抽出する。
+//    // 抽出したリストをControllerに返す。
+//
+//    // 検索処理 Repositoryの情報をServiceで使えるように、searchStudentsCoursesという変数につめた
+//    List<StudentsCourses> searchStudentsCourses = repository.searchStudentsCourses();
+//
+//    // 絞り込み処理
+//    List<StudentsCourses> filteredStudentsCourses = searchStudentsCourses.stream()
+//        .filter(i -> i.getCourseName().contains("Java基礎コース"))
+//        .toList();
+//
+//    return filteredStudentsCourses;
+//  }
 }
