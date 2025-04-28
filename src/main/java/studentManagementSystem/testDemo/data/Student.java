@@ -21,3 +21,7 @@ public class Student {
   private boolean isDeleted; // 論理削除 削除フラグ
 
 }
+
+// チャレンジ課題
+// ALTER TABLE student ADD remark VARCHAR(255) AFTER gender;
+// ALTER TABLE student ADD isDeleted VARCHAR(255) AFTER remark;
