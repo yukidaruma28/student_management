@@ -1,4 +1,4 @@
-package studentManagementSystem.testDemo;
+package studentManagementSystem.testDemo.data;
 
 import lombok.Getter;
 import lombok.Setter;

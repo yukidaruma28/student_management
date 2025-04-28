@@ -1,12 +1,13 @@
-package studentManagementSystem.testDemo;
+package studentManagementSystem.testDemo.repository;
 
 // これはSQLを実行するためのインターフェースという考え方
 // Webの世界から検索や登録をするインターフェース
 
-import java.util.Arrays;
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import studentManagementSystem.testDemo.data.Student;
+import studentManagementSystem.testDemo.data.StudentsCourses;
 
 @Mapper
 public interface StudentRepository {
@@ -22,6 +23,10 @@ public interface StudentRepository {
   // 指定したIDの情報を一括取得
   @Select("SELECT * FROM student WHERE id = #{id}")
   Student findStudentId(int id); // ここのStudentはStudentの中身を全部返す意味
+
+  @Select("SELECT * FROM student WHERE id = #{id}")
+  Student searchStudentById(int id); // ここのStudentはStudentの中身を全部返す意味
+
 
   // 名前全件取得
   @Select("SELECT name FROM student")
