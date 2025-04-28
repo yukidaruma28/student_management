@@ -59,10 +59,7 @@ public interface StudentRepository {
 
   // students_coursesの全件取得
   @Select("SELECT * FROM students_courses")
-  List<StudentsCourses> searchStudentsCourses();
-
-
-
+  List<StudentsCourses> searchStudentsCoursesList();
 }
 
 // 課題① studentのRead処理を実装する
