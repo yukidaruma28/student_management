@@ -4,10 +4,12 @@ package studentManagementSystem.testDemo.repository;
 // Webの世界から検索や登録をするインターフェース
 
 import java.util.List;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import studentManagementSystem.testDemo.data.Student;
 import studentManagementSystem.testDemo.data.StudentsCourses;
+import studentManagementSystem.testDemo.domain.StudentDetail;
 
 @Mapper
 public interface StudentRepository {
@@ -56,10 +58,15 @@ public interface StudentRepository {
   @Select("SELECT gender FROM student")
   List<String> searchStudentGender();
 
-
   // students_coursesの全件取得
   @Select("SELECT * FROM students_courses")
   List<StudentsCourses> searchStudentsCoursesList();
+
+  // INSERT INTO テーブル名 (列名1, 列名2, 列名3) VALUES (値1, 値2, 値3)
+  @Insert("INSERT INTO student(name) VALUES(#{name})")
+  void registerStudent(StudentDetail studentDetail);
+  // StringじゃなくてVoidかも？
+
 }
 
 // 課題① studentのRead処理を実装する

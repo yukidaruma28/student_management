@@ -20,15 +20,7 @@ public class StudentService {
 
   public List<Student> searchStudentList() {
     List<Student> studentList = repository.searchStudent();
-
-    // 課題① 24_Read処理のServiceとController部分を実装
-    // 絞り込みを行う。年齢が30代の人のみを抽出する。
-    // 抽出したリストをControllerに返す。
-    List<Student> filteredList = studentList.stream()
-        .filter(i -> i.getAge() >= 30 && i.getAge() <= 39)
-        .toList();
-
-    return filteredList;
+    return studentList;
   }
 
 //  public List<Student> searchStudentList() {

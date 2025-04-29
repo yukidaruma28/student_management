@@ -1,18 +1,15 @@
 package studentManagementSystem.testDemo.Controller;
 
+import org.apache.ibatis.annotations.Insert;
 import org.springframework.ui.Model;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
 import studentManagementSystem.testDemo.Controller.converter.StudentConverter;
 import studentManagementSystem.testDemo.data.Student;
 import studentManagementSystem.testDemo.data.StudentsCourses;
@@ -113,21 +110,27 @@ public class StudentController {
   @GetMapping("/newStudent")
   public String newStudent(Model model){
     model.addAttribute("studentDetail", new StudentDetail());
-    return "resisterStudent";
+    return "registerStudent";
   }
 
-  @PostMapping ("/resisterStudent")
-  public String resisterStudent(@ModelAttribute StudentDetail studentDetail, BindingResult result) {
-    if (result.hasErrors()) {
-      return ("resisterStudent");
+  @PostMapping ("/registerStudent")
+  public String registerStudent(@ModelAttribute StudentDetail studentDetail, BindingResult result) {
+    if (result.hasErrors()) { // エラーが起きたときに、元の画面に戻る処理
+      return ("registerStudent");
     }
-
+    // 28_Thymeleafを使ったPOST処理
     // 課題① 新規受講生情報を登録する処理を実装する。
     // 最終的に /studentList で確認できるようにする。
 
+    studentRepository.registerStudent(studentDetail);  // DBにINSERTする
+
+
+
+    // 28_Thymeleafを使ったPOST処理
     // 課題② コース情報も一緒に登録できるように実装する。コースは単体でOK。
     // コース情報の確認は /studentsCoursesList でOK。
 
     return "redirect:/studentList";
   }
 }
+
