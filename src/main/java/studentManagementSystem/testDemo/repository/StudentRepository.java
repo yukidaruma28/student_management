@@ -63,9 +63,10 @@ public interface StudentRepository {
   List<StudentsCourses> searchStudentsCoursesList();
 
   // INSERT INTO テーブル名 (列名1, 列名2, 列名3) VALUES (値1, 値2, 値3)
-  @Insert("INSERT INTO student(name) VALUES(#{name})")
+
+  // テーブル名をtestとしたのは、最小単位でのテーブルで登録ができているのか確認したかったため
+  @Insert("INSERT INTO test(name) VALUES(#{student.name})")
   void registerStudent(StudentDetail studentDetail);
-  // StringじゃなくてVoidかも？
 
 }
 

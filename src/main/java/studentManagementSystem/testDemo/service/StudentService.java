@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import studentManagementSystem.testDemo.data.Student;
 import studentManagementSystem.testDemo.data.StudentsCourses;
+import studentManagementSystem.testDemo.domain.StudentDetail;
 import studentManagementSystem.testDemo.repository.StudentRepository;
 
 @Service
@@ -83,6 +84,10 @@ public class StudentService {
 
   public List<StudentsCourses> searchStudentsCoursessList() {
     return repository.searchStudentsCoursesList();
+  }
+  // voidの理由：登録するだけなので、voidで返り値なしとする
+  public void registerStudent(StudentDetail studentDetail) {
+    repository.registerStudent(studentDetail);  // たとえば名前だけ渡す
   }
 
 //課題②のために、コメントアウト
