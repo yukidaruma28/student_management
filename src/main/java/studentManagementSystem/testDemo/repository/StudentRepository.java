@@ -76,7 +76,16 @@ public interface StudentRepository {
   void registerStudent(StudentDetail studentDetail);
 
 
+  @Insert("""
+    INSERT INTO students_courses
+      (courseName, startDate, endDate)
+    VALUES
+      (#{studentsCourses.courseName}, #{studentsCourses.startDate}, #{studentsCourses.endDate})
+  """)
+  void registerStudentsCoursesList(StudentDetail studentDetail);
+
 }
+
 
 // 課題① studentのRead処理を実装する
 // 課題② students_coursesの全件取得を実装する

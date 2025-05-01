@@ -90,6 +90,10 @@ public class StudentService {
     repository.registerStudent(studentDetail);
   }
 
+  public void registerStudentsCoursesList(StudentDetail studentDetail) {
+    repository.registerStudentsCoursesList(studentDetail);
+  }
+
 //課題②のために、コメントアウト
 //  public List<StudentsCourses> searchStudentsCoursesList() {
 //    // 課題② 24_Read処理のServiceとController部分を実装

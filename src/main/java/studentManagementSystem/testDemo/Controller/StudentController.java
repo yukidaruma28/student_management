@@ -126,12 +126,11 @@ public class StudentController {
 
     service.registerStudent(studentDetail);
 
-
     // 28_Thymeleafを使ったPOST処理
     // 課題② コース情報も一緒に登録できるように実装する。コースは単体でOK。
     // コース情報の確認は /studentsCoursesList でOK。
 
-
+    service.registerStudentsCoursesList(studentDetail);
 
 
     return "redirect:/studentList";

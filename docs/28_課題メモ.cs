@@ -24,8 +24,8 @@
   - なので、この登録情報を引数で渡して、/studentListで受講生コース一覧も一緒に出したらいいんじゃね？
 
 ### 基本方針を踏まえて、やること
-  1. HTMLの改造
-    registerStudent -> course_name、course_start_date、end_dateの3つを、追加する
-    studentList -> course_name、course_start_date、end_dateの3つを、追加する
+  1. HTMLのコーディング
+    * studentList -> course_name、course_start_date、end_dateの3つを、追加する
+    * registerStudent -> course_name、course_start_date、end_dateの3つを、追加する
   2. 登録情報をSQLまで引数で渡して、登録する一連のコーディング
   3. /studentListで受講生コース一覧も一緒に出す
