@@ -131,6 +131,9 @@ public class StudentController {
     // 課題② コース情報も一緒に登録できるように実装する。コースは単体でOK。
     // コース情報の確認は /studentsCoursesList でOK。
 
+
+
+
     return "redirect:/studentList";
   }
 }
