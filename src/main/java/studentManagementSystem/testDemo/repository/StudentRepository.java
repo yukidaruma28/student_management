@@ -63,10 +63,18 @@ public interface StudentRepository {
   List<StudentsCourses> searchStudentsCoursesList();
 
   // INSERT INTO テーブル名 (列名1, 列名2, 列名3) VALUES (値1, 値2, 値3)
+//  @Insert("INSERT INTO test(name) VALUES(#{student.name})")
+//  void registerStudent(StudentDetail studentDetail);
 
-  // テーブル名をtestとしたのは、最小単位でのテーブルで登録ができているのか確認したかったため
-  @Insert("INSERT INTO test(name) VALUES(#{student.name})")
+  @Insert("""
+  INSERT INTO student
+    (name, furigana, nickname, email, area, age, gender, remark, isDeleted)
+  VALUES
+    (#{student.name}, #{student.furigana}, #{student.nickname}, #{student.email},
+     #{student.area}, #{student.age}, #{student.gender}, #{student.remark}, #{student.isDeleted})
+""")
   void registerStudent(StudentDetail studentDetail);
+
 
 }
 

@@ -87,7 +87,7 @@ public class StudentService {
   }
   // voidの理由：登録するだけなので、voidで返り値なしとする
   public void registerStudent(StudentDetail studentDetail) {
-    repository.registerStudent(studentDetail);  // たとえば名前だけ渡す
+    repository.registerStudent(studentDetail);
   }
 
 //課題②のために、コメントアウト

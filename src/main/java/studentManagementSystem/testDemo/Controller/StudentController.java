@@ -117,6 +117,7 @@ public class StudentController {
   @PostMapping ("/registerStudent")
   public String registerStudent(@ModelAttribute StudentDetail studentDetail, BindingResult result) {
     if (result.hasErrors()) { // エラーが起きたときに、元の画面に戻る処理
+      System.out.println("エラーが発生しています。"); // 文字としてもわかるように追加
       return ("registerStudent");
     }
     // 28_Thymeleafを使ったPOST処理
@@ -130,8 +131,7 @@ public class StudentController {
     // 課題② コース情報も一緒に登録できるように実装する。コースは単体でOK。
     // コース情報の確認は /studentsCoursesList でOK。
 
-//    return "redirect:/studentList";
-    return "redirect:/newStudent";
+    return "redirect:/studentList";
   }
 }
 
