@@ -1,5 +1,6 @@
 package studentManagementSystem.testDemo.Controller;
 
+import java.util.Arrays;
 import org.apache.ibatis.annotations.Insert;
 import org.springframework.ui.Model;
 import java.util.List;
@@ -109,15 +110,17 @@ public class StudentController {
 
 
   @GetMapping("/newStudent")
-  public String newStudent(Model model){
-    model.addAttribute("studentDetail", new StudentDetail());
+  public String newStudent(Model model) {
+    StudentDetail studentDetail = new StudentDetail();
+    studentDetail.setStudentsCourses(Arrays.asList(new StudentsCourses()));
+    model.addAttribute("studentDetail", studentDetail);
     return "registerStudent";
   }
+
 
   @PostMapping ("/registerStudent")
   public String registerStudent(@ModelAttribute StudentDetail studentDetail, BindingResult result) {
     if (result.hasErrors()) { // エラーが起きたときに、元の画面に戻る処理
-      System.out.println("エラーが発生しています。"); // 文字としてもわかるように追加
       return ("registerStudent");
     }
     // 28_Thymeleafを使ったPOST処理

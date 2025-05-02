@@ -6,6 +6,7 @@ package studentManagementSystem.testDemo.repository;
 import java.util.List;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
 import studentManagementSystem.testDemo.data.Student;
 import studentManagementSystem.testDemo.data.StudentsCourses;
@@ -66,15 +67,28 @@ public interface StudentRepository {
 //  @Insert("INSERT INTO test(name) VALUES(#{student.name})")
 //  void registerStudent(StudentDetail studentDetail);
 
-  @Insert("""
-  INSERT INTO student
-    (name, furigana, nickname, email, area, age, gender, remark, isDeleted)
-  VALUES
-    (#{student.name}, #{student.furigana}, #{student.nickname}, #{student.email},
-     #{student.area}, #{student.age}, #{student.gender}, #{student.remark}, #{student.isDeleted})
-""")
-  void registerStudent(StudentDetail studentDetail);
+// 自分のコード
+//  @Insert("""
+//  INSERT INTO student
+//    (name, furigana, nickname, email, area, age, gender, remark, isDeleted)
+//  VALUES
+//    (#{student.name}, #{student.furigana}, #{student.nickname}, #{student.email},
+//     #{student.area}, #{student.age}, #{student.gender}, #{student.remark}, #{student.isDeleted})
+//""")
+//    void registerStudent(StudentDetail studentDetail);
 
+  // 29_のコード
+  @Insert("INSERT INTO student(name, furigana, nickname, email, area, age, gender, remark, is_deleted) "
+      + "VALUES(#{name}, #{furigana}, #{nickname}, #{email}, #{area}, #{age}, #{gender}, #{remark}, false)")
+  @Options(useGeneratedKeys = true, keyProperty = "studentId")
+
+  void registerStudent(Student student);
+
+  @Insert("INSERT INTO students_courses (studentId, course_name, course_start_date, end_date) "
+      + "VALUES (#{studentId}, #{courseName}, #{startDate}, #{endDate})")
+  @Options(useGeneratedKeys = true, keyProperty = "studentsCoursesId")
+
+  void registerStudentsCourses(StudentsCourses studentsCourses);
 
 }
 

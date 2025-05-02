@@ -1,9 +1,13 @@
 package studentManagementSystem.testDemo.service;
 
+import java.beans.Transient;
+import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import studentManagementSystem.testDemo.data.Student;
 import studentManagementSystem.testDemo.data.StudentsCourses;
@@ -86,8 +90,23 @@ public class StudentService {
     return repository.searchStudentsCoursesList();
   }
   // voidの理由：登録するだけなので、voidで返り値なしとする
+  // 自分のコード
+//  @Transactional
+//  public void registerStudent(StudentDetail studentDetail) {
+//    repository.registerStudent(studentDetail);
+//  }
+
+  // 29_のコード
+  @Transactional
   public void registerStudent(StudentDetail studentDetail) {
-    repository.registerStudent(studentDetail);
+    repository.registerStudent(studentDetail.getStudent());
+
+    for (StudentsCourses studentsCourses:studentDetail.getStudentsCourses()) {
+      studentsCourses.setStudentId(studentDetail.getStudent().getStudentId());
+      studentsCourses.setStartDate(new Timestamp(System.currentTimeMillis()));
+      studentsCourses.setEndDate(new Timestamp(System.currentTimeMillis() + 1000L * 60 * 60 * 24 * 365));
+      repository.registerStudentsCourses(studentsCourses);
+    }
   }
 
 //課題②のために、コメントアウト
