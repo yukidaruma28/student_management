@@ -99,14 +99,12 @@ public class StudentService {
     return studentDetail;
   }
 
-  // voidの理由：登録するだけなので、voidで返り値なしとする
-  // 自分のコード
+// 自分のコード
 //  @Transactional
 //  public void registerStudent(StudentDetail studentDetail) {
 //    repository.registerStudent(studentDetail);
 //  }
 
-  // 29_のコード
   @Transactional
   public void registerStudent(StudentDetail studentDetail) {
     repository.registerStudent(studentDetail.getStudent());
