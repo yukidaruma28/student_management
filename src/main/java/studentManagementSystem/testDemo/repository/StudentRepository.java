@@ -11,6 +11,7 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import studentManagementSystem.testDemo.data.Student;
 import studentManagementSystem.testDemo.data.StudentsCourses;
+import studentManagementSystem.testDemo.domain.StudentDetail;
 
 @Mapper
 public interface StudentRepository {
@@ -88,32 +89,21 @@ public interface StudentRepository {
   @Insert("INSERT INTO student(name, furigana, nickname, email, area, age, gender, remark, is_deleted) "
       + "VALUES(#{name}, #{furigana}, #{nickname}, #{email}, #{area}, #{age}, #{gender}, #{remark}, false)")
   @Options(useGeneratedKeys = true, keyProperty = "studentId")
-
   void registerStudent(Student student);
 
   @Insert("INSERT INTO students_courses (studentId, course_name, course_start_date, end_date) "
       + "VALUES (#{studentId}, #{courseName}, #{startDate}, #{endDate})")
   @Options(useGeneratedKeys = true, keyProperty = "studentsCoursesId")
-
   void registerStudentsCourses(StudentsCourses studentsCourses);
 
   @Update("UPDATE student SET name = #{name}, furigana = #{furigana}, nickname = #{nickname}, "
       + "email = #{email}, area = #{area}, age = #{age}, gender = #{gender}, remark = #{remark}, is_deleted = #{isDeleted} "
       + "WHERE studentId = #{studentId}")
-
   void updateStudent(Student student);
 
   @Update("UPDATE students_courses SET course_name = #{courseName} WHERE students_courses_id = #{studentsCoursesId}")
-
   void updateStudentsCourses(StudentsCourses studentsCourses);
 
-
-
-
-
-
-
+//  @Update("UPDATE student SET is_deleted = 1 WHERE studentId = #{studentId}")
+//  void isDeletedStudent(Student student);
 }
-
-// 課題① studentのRead処理を実装する
-// 課題② students_coursesの全件取得を実装する

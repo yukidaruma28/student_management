@@ -1,5 +1,6 @@
 package studentManagementSystem.testDemo.data;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,7 +19,7 @@ public class Student {
   private int age;
   private String gender;
   private String remark; // 備考欄
-  private boolean isDeleted; // 論理削除 削除フラグ
+  private boolean isDeleted; // 論理削除
 
 }
 

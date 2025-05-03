@@ -42,15 +42,23 @@
     <label for="remark">備考：</label>
     <input type="text" id="remark" th:field="*{student.remark}"  />
     <br>
+
+    <label for="isDeleted">論理削除：</label>
+    <input type="checkbox" id="isDeleted" th:field="*{student.isDeleted}"  />
+    <br>
   </div>
 
   <div th:each="course, stat : *{studentsCourses}">
+<!--    動画講座内のコード-->
 <!--    <label for="studentsCoursesId"-->
 <!--           th:for="studentsCourses.__${stat.index}__.courseName">受講コースID</label>-->
 <!--    <input type="text" id="studentsCoursesId" th:id="studentsCourses.__${stat.index}__.studentsCoursesId"-->
 <!--           th:field="*{studentsCourses[__${stat.index}__].studentsCoursesId}">-->
 
-    <input type="hidden" th:field="*{studentsCourses.studentId}" />
+<!--    hiddenにして、IDを隠しつつ、取得した-->
+    <input type="hidden" id="studentsCoursesId"
+           th:id="studentsCourses.__${stat.index}__.studentsCoursesId"
+           th:field="*{studentsCourses[__${stat.index}__].studentsCoursesId}">
 
     <label for="courseName"
            th:for="studentsCourses.__${stat.index}__.courseName">受講コース名</label>
