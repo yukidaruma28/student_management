@@ -99,12 +99,6 @@ public class StudentService {
     return studentDetail;
   }
 
-// 自分のコード
-//  @Transactional
-//  public void registerStudent(StudentDetail studentDetail) {
-//    repository.registerStudent(studentDetail);
-//  }
-
   @Transactional
   public void registerStudent(StudentDetail studentDetail) {
     repository.registerStudent(studentDetail.getStudent());
@@ -125,21 +119,4 @@ public class StudentService {
       repository.updateStudentsCourses(studentsCourses);
     }
   }
-
-//課題②のために、コメントアウト
-//  public List<StudentsCourses> searchStudentsCoursesList() {
-//    // 課題② 24_Read処理のServiceとController部分を実装
-//    // 絞り込み検索で「Java基礎コース」のコース情報のみを抽出する。
-//    // 抽出したリストをControllerに返す。
-//
-//    // 検索処理 Repositoryの情報をServiceで使えるように、searchStudentsCoursesという変数につめた
-//    List<StudentsCourses> searchStudentsCourses = repository.searchStudentsCourses();
-//
-//    // 絞り込み処理
-//    List<StudentsCourses> filteredStudentsCourses = searchStudentsCourses.stream()
-//        .filter(i -> i.getCourseName().contains("Java基礎コース"))
-//        .toList();
-//
-//    return filteredStudentsCourses;
-//  }
 }
