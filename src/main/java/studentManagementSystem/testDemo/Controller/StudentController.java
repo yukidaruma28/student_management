@@ -139,7 +139,7 @@ public class StudentController {
 
   @PostMapping ("/updateStudent")
   public String updateStudent(@ModelAttribute StudentDetail studentDetail, BindingResult result) {
-    if (result.hasErrors()) { // エラーが起きたときに、元の画面に戻る処理
+    if (result.hasErrors()) {
       return ("updateStudent");
     }
     service.updateStudent(studentDetail);
