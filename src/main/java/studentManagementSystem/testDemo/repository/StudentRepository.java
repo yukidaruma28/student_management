@@ -84,7 +84,6 @@ public interface StudentRepository {
 //""")
 //    void registerStudent(StudentDetail studentDetail);
 
-  // 29_のコード
   @Insert("INSERT INTO student(name, furigana, nickname, email, area, age, gender, remark, is_deleted) "
       + "VALUES(#{name}, #{furigana}, #{nickname}, #{email}, #{area}, #{age}, #{gender}, #{remark}, false)")
   @Options(useGeneratedKeys = true, keyProperty = "studentId")
