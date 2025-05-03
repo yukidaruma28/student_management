@@ -1,12 +1,18 @@
 package studentManagementSystem.testDemo.service;
 
+import java.beans.Transient;
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import studentManagementSystem.testDemo.data.Student;
 import studentManagementSystem.testDemo.data.StudentsCourses;
+import studentManagementSystem.testDemo.domain.StudentDetail;
 import studentManagementSystem.testDemo.repository.StudentRepository;
 
 @Service
@@ -20,15 +26,7 @@ public class StudentService {
 
   public List<Student> searchStudentList() {
     List<Student> studentList = repository.searchStudent();
-
-    // 課題① 24_Read処理のServiceとController部分を実装
-    // 絞り込みを行う。年齢が30代の人のみを抽出する。
-    // 抽出したリストをControllerに返す。
-    List<Student> filteredList = studentList.stream()
-        .filter(i -> i.getAge() >= 30 && i.getAge() <= 39)
-        .toList();
-
-    return filteredList;
+    return studentList;
   }
 
 //  public List<Student> searchStudentList() {
@@ -89,8 +87,45 @@ public class StudentService {
     return repository.searchStudentsCoursesList();
   }
 
-  public List<StudentsCourses> searchStudentsCoursessList() {
-    return repository.searchStudentsCoursesList();
+  public StudentDetail searchStudent(String studentId) {
+    Student student = repository.searchStudentOne(studentId);
+    List<StudentsCourses> studentsCourses = repository.searchStudentsCourses(student.getStudentId());
+
+    StudentDetail studentDetail = new StudentDetail();
+
+    studentDetail.setStudent(student);
+    studentDetail.setStudentsCourses(studentsCourses);
+
+    return studentDetail;
+  }
+
+  // voidの理由：登録するだけなので、voidで返り値なしとする
+  // 自分のコード
+//  @Transactional
+//  public void registerStudent(StudentDetail studentDetail) {
+//    repository.registerStudent(studentDetail);
+//  }
+
+  // 29_のコード
+  @Transactional
+  public void registerStudent(StudentDetail studentDetail) {
+    repository.registerStudent(studentDetail.getStudent());
+
+    for (StudentsCourses studentsCourses:studentDetail.getStudentsCourses()) {
+      studentsCourses.setStudentId(studentDetail.getStudent().getStudentId());
+      studentsCourses.setStartDate(Timestamp.valueOf(LocalDateTime.now()));
+      studentsCourses.setEndDate(Timestamp.valueOf(LocalDateTime.now()));
+      repository.registerStudentsCourses(studentsCourses);
+    }
+  }
+
+  @Transactional
+  public void updateStudent(StudentDetail studentDetail) {
+    repository.updateStudent(studentDetail.getStudent());
+
+    for (StudentsCourses studentsCourses:studentDetail.getStudentsCourses()) {
+      repository.updateStudentsCourses(studentsCourses);
+    }
   }
 
 //課題②のために、コメントアウト
