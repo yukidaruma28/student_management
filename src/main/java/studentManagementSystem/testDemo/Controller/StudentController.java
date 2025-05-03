@@ -135,5 +135,21 @@ public class StudentController {
     service.updateStudent(studentDetail);
     return "redirect:/studentList";
   }
-}
 
+  // 受講生論理削除
+//  @GetMapping("/student/{studentId}")
+//  public String getDeletedStudent(@PathVariable String studentId, Model model) {
+//    StudentDetail studentDetail = service.searchStudent(studentId);
+//    model.addAttribute("studentDetail", studentDetail);
+//    return "updateStudent";
+//  }
+//
+//  @PostMapping ("/updateStudent")
+//  public String isDeletedStudent(@ModelAttribute StudentDetail studentDetail, BindingResult result) {
+//    if (result.hasErrors()) {
+//      return ("updateStudent");
+//    }
+//    service.isDeletedStudent(studentDetail);
+//    return "redirect:/studentList";
+//  }
+}

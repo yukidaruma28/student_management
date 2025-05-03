@@ -106,4 +106,14 @@ public interface StudentRepository {
   @Update("UPDATE students_courses SET course_name = #{courseName} WHERE students_courses_id = #{studentsCoursesId}")
 
   void updateStudentsCourses(StudentsCourses studentsCourses);
+
+
+
+
+
+
+
 }
+
+// 課題① studentのRead処理を実装する
+// 課題② students_coursesの全件取得を実装する
