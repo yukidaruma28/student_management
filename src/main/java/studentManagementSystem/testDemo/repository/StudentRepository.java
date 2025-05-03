@@ -8,9 +8,9 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 import studentManagementSystem.testDemo.data.Student;
 import studentManagementSystem.testDemo.data.StudentsCourses;
-import studentManagementSystem.testDemo.domain.StudentDetail;
 
 @Mapper
 public interface StudentRepository {
@@ -18,6 +18,17 @@ public interface StudentRepository {
   // 全件取得
   @Select("SELECT * FROM student")
   List<Student> searchStudent();
+
+  // 全件取得
+  @Select("SELECT * FROM student WHERE studentId = #{studentId}")
+  Student searchStudentOne(String studentId);
+
+  @Select("SELECT * FROM students_courses")
+  List<StudentsCourses> searchStudentsCoursesList();
+
+  @Select("SELECT * FROM students_courses WHERE studentId = #{studentId}")
+  List<StudentsCourses> searchStudentsCourses(String studentId);
+
 
   // ID全件取得
   @Select("SELECT id FROM student")
@@ -59,10 +70,6 @@ public interface StudentRepository {
   @Select("SELECT gender FROM student")
   List<String> searchStudentGender();
 
-  // students_coursesの全件取得
-  @Select("SELECT * FROM students_courses")
-  List<StudentsCourses> searchStudentsCoursesList();
-
   // INSERT INTO テーブル名 (列名1, 列名2, 列名3) VALUES (値1, 値2, 値3)
 //  @Insert("INSERT INTO test(name) VALUES(#{student.name})")
 //  void registerStudent(StudentDetail studentDetail);
@@ -89,6 +96,22 @@ public interface StudentRepository {
   @Options(useGeneratedKeys = true, keyProperty = "studentsCoursesId")
 
   void registerStudentsCourses(StudentsCourses studentsCourses);
+
+  @Update("UPDATE student SET name = #{name}, furigana = #{furigana}, nickname = #{nickname}, "
+      + "email = #{email}, area = #{area}, age = #{age}, gender = #{gender}, remark = #{remark}, is_deleted = #{isDeleted} "
+      + "WHERE studentId = #{studentId}")
+
+  void updateStudent(Student student);
+
+  @Update("UPDATE students_courses SET course_name = #{courseName} WHERE students_courses_id = #{studentsCoursesId}")
+
+  void updateStudentsCourses(StudentsCourses studentsCourses);
+
+
+
+
+
+
 
 }
 

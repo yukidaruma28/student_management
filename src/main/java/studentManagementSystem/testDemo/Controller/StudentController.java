@@ -53,11 +53,11 @@ public class StudentController {
   // https://poco-tech.com/posts/spring-boot-introduction/path-variable-annotation/
   // https://annotations-lab.com/pathvariable%E3%81%AE%E4%BD%BF%E3%81%84%E6%96%B9%E3%81%A8%E5%BC%95%E6%95%B0%E3%82%92%E5%BE%B9%E5%BA%95%E8%A7%A3%E8%AA%AC%EF%BC%81%E3%80%90%E5%88%9D%E5%BF%83%E8%80%85%E5%90%91%E3%81%91%E3%80%91/
 
-  // 正規表現で数字のみを入力するようにした
-  @GetMapping("/student/{id:[0-9]+}")
-  public Student getStudentId(@PathVariable int id) {
-    return service.searchStudentById(id);
-  }
+//  // 正規表現で数字のみを入力するようにした
+//  @GetMapping("/student/{id:[0-9]+}")
+//  public Student getStudentId(@PathVariable int id) {
+//    return service.searchStudentById(id);
+//  }
 
   // 名前全件取得
   @GetMapping("/studentName")
@@ -101,14 +101,6 @@ public class StudentController {
     return service.searchStudentGender();
   }
 
-
-  // students_coursesの全件取得
-  @GetMapping("/studentsCoursesList")
-  public List<StudentsCourses> getStudentsCoursessList() {
-    return service.searchStudentsCoursessList();
-  }
-
-
   @GetMapping("/newStudent")
   public String newStudent(Model model) {
     StudentDetail studentDetail = new StudentDetail();
@@ -134,6 +126,23 @@ public class StudentController {
     // 課題② コース情報も一緒に登録できるように実装する。コースは単体でOK。
     // コース情報の確認は /studentsCoursesList でOK。
 
+    return "redirect:/studentList";
+  }
+
+  // 受講生更新
+  @GetMapping("/student/{studentId}")
+  public String getStudent(@PathVariable String studentId, Model model) {
+    StudentDetail studentDetail = service.searchStudent(studentId);
+    model.addAttribute("studentDetail", studentDetail);
+    return "updateStudent";
+  }
+
+  @PostMapping ("/updateStudent")
+  public String updateStudent(@ModelAttribute StudentDetail studentDetail, BindingResult result) {
+    if (result.hasErrors()) { // エラーが起きたときに、元の画面に戻る処理
+      return ("updateStudent");
+    }
+    service.updateStudent(studentDetail);
     return "redirect:/studentList";
   }
 }

@@ -3,6 +3,7 @@ package studentManagementSystem.testDemo.service;
 import java.beans.Transient;
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,9 +87,18 @@ public class StudentService {
     return repository.searchStudentsCoursesList();
   }
 
-  public List<StudentsCourses> searchStudentsCoursessList() {
-    return repository.searchStudentsCoursesList();
+  public StudentDetail searchStudent(String studentId) {
+    Student student = repository.searchStudentOne(studentId);
+    List<StudentsCourses> studentsCourses = repository.searchStudentsCourses(student.getStudentId());
+
+    StudentDetail studentDetail = new StudentDetail();
+
+    studentDetail.setStudent(student);
+    studentDetail.setStudentsCourses(studentsCourses);
+
+    return studentDetail;
   }
+
   // voidの理由：登録するだけなので、voidで返り値なしとする
   // 自分のコード
 //  @Transactional
@@ -103,9 +113,18 @@ public class StudentService {
 
     for (StudentsCourses studentsCourses:studentDetail.getStudentsCourses()) {
       studentsCourses.setStudentId(studentDetail.getStudent().getStudentId());
-      studentsCourses.setStartDate(new Timestamp(System.currentTimeMillis()));
-      studentsCourses.setEndDate(new Timestamp(System.currentTimeMillis() + 1000L * 60 * 60 * 24 * 365));
+      studentsCourses.setStartDate(Timestamp.valueOf(LocalDateTime.now()));
+      studentsCourses.setEndDate(Timestamp.valueOf(LocalDateTime.now()));
       repository.registerStudentsCourses(studentsCourses);
+    }
+  }
+
+  @Transactional
+  public void updateStudent(StudentDetail studentDetail) {
+    repository.updateStudent(studentDetail.getStudent());
+
+    for (StudentsCourses studentsCourses:studentDetail.getStudentsCourses()) {
+      repository.updateStudentsCourses(studentsCourses);
     }
   }
 
