@@ -115,17 +115,7 @@ public class StudentController {
     if (result.hasErrors()) { // エラーが起きたときに、元の画面に戻る処理
       return ("registerStudent");
     }
-    // 28_Thymeleafを使ったPOST処理
-    // 課題① 新規受講生情報を登録する処理を実装する。
-    // 最終的に /studentList で確認できるようにする。
-
     service.registerStudent(studentDetail);
-
-
-    // 28_Thymeleafを使ったPOST処理
-    // 課題② コース情報も一緒に登録できるように実装する。コースは単体でOK。
-    // コース情報の確認は /studentsCoursesList でOK。
-
     return "redirect:/studentList";
   }
 

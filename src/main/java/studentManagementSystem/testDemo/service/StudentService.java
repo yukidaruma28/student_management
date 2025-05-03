@@ -87,7 +87,6 @@ public class StudentService {
     return repository.searchStudentsCoursesList();
   }
 
-  // studentとstudentsCoursesを、studentDetailにまとめる
   public StudentDetail searchStudent(String studentId) {
     Student student = repository.searchStudentOne(studentId);
     List<StudentsCourses> studentsCourses = repository.searchStudentsCourses(student.getStudentId());
@@ -99,6 +98,13 @@ public class StudentService {
 
     return studentDetail;
   }
+
+  // voidの理由：登録するだけなので、voidで返り値なしとする
+  // 自分のコード
+//  @Transactional
+//  public void registerStudent(StudentDetail studentDetail) {
+//    repository.registerStudent(studentDetail);
+//  }
 
   // 29_のコード
   @Transactional
@@ -122,10 +128,6 @@ public class StudentService {
     }
   }
 
-//  @Transactional
-//  public void isDeletedStudent(StudentDetail studentDetail) {
-//    repository.isDeletedStudent(studentDetail.getStudent());
-//  }
 //課題②のために、コメントアウト
 //  public List<StudentsCourses> searchStudentsCoursesList() {
 //    // 課題② 24_Read処理のServiceとController部分を実装
