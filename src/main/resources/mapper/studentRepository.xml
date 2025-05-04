@@ -12,11 +12,6 @@
     SELECT * FROM student WHERE studentId = #{studentId}
   </select>
 
-  <!--
-  課題：すべてのSQL文をxmlに移行する
-  @Insertや@Updateの書き方も調べたら出てくる
-   -->
-
   <!-- 受講生コース情報の全件検索 -->
   <select id="searchStudentCourseList" resultType="studentManagementSystem.testDemo.data.StudentCourse">
     SELECT * FROM students_courses
