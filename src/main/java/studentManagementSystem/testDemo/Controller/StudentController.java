@@ -2,6 +2,7 @@ package studentManagementSystem.testDemo.Controller;
 
 import java.util.Arrays;
 import org.apache.ibatis.annotations.Insert;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 import studentManagementSystem.testDemo.Controller.converter.StudentConverter;
 import studentManagementSystem.testDemo.data.Student;
 import studentManagementSystem.testDemo.data.StudentsCourses;
@@ -18,7 +21,7 @@ import studentManagementSystem.testDemo.domain.StudentDetail;
 import studentManagementSystem.testDemo.repository.StudentRepository;
 import studentManagementSystem.testDemo.service.StudentService;
 
-@Controller
+@RestController
 public class StudentController {
 
   private StudentService service;
@@ -32,12 +35,10 @@ public class StudentController {
 
   // 全件取得
   @GetMapping("/studentList")
-  public String getStudentList(Model model) {
+  public List<StudentDetail> getStudentList() {
     List<Student> students = service.searchStudentList();
     List<StudentsCourses> studentsCourses = service.searchStudentsCoursesList();
-
-    model.addAttribute("studentList", converter.convertStudentDetails(students, studentsCourses));
-    return "studentList";
+    return converter.convertStudentDetails(students, studentsCourses);
   }
 
 
@@ -128,28 +129,8 @@ public class StudentController {
   }
 
   @PostMapping ("/updateStudent")
-  public String updateStudent(@ModelAttribute StudentDetail studentDetail, BindingResult result) {
-    if (result.hasErrors()) {
-      return ("updateStudent");
-    }
+  public ResponseEntity<String> updateStudent(@RequestBody StudentDetail studentDetail) {
     service.updateStudent(studentDetail);
-    return "redirect:/studentList";
+    return ResponseEntity.ok("更新処理が成功しました。");
   }
-
-  // 受講生論理削除
-//  @GetMapping("/student/{studentId}")
-//  public String getDeletedStudent(@PathVariable String studentId, Model model) {
-//    StudentDetail studentDetail = service.searchStudent(studentId);
-//    model.addAttribute("studentDetail", studentDetail);
-//    return "updateStudent";
-//  }
-//
-//  @PostMapping ("/updateStudent")
-//  public String isDeletedStudent(@ModelAttribute StudentDetail studentDetail, BindingResult result) {
-//    if (result.hasErrors()) {
-//      return ("updateStudent");
-//    }
-//    service.isDeletedStudent(studentDetail);
-//    return "redirect:/studentList";
-//  }
 }
