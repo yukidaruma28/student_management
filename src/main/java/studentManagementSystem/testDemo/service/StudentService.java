@@ -1,114 +1,60 @@
 package studentManagementSystem.testDemo.service;
 
-import java.beans.Transient;
 import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
+import studentManagementSystem.testDemo.Controller.converter.StudentConverter;
 import studentManagementSystem.testDemo.data.Student;
 import studentManagementSystem.testDemo.data.StudentsCourses;
 import studentManagementSystem.testDemo.domain.StudentDetail;
 import studentManagementSystem.testDemo.repository.StudentRepository;
 
+/**
+ * 受講生情報を扱うサービスです
+ * 受講生の検索や登録、更新の処理を行います
+ * 
+ */
 @Service
 public class StudentService {
   private StudentRepository repository;
+  private StudentConverter converter;
 
   @Autowired
-  public StudentService(StudentRepository repository) {
+  public StudentService(StudentRepository repository, StudentConverter converter) {
     this.repository = repository;
+    this.converter = converter;
   }
 
-  public List<Student> searchStudentList() {
-    List<Student> studentList = repository.searchStudent();
-    return studentList;
+  /**
+   * 受講生検索一覧機能です 全件検索を実行します
+   *
+   * @return 受講生一覧(全件)
+   */
+  public List<StudentDetail> searchStudentList() {
+  List<Student> stundentList = repository.searchStudent();
+  List<StudentsCourses> studentsCoursesList = repository.searchStudentsCoursesList();
+
+    return converter.convertStudentDetails(stundentList, studentsCoursesList);
   }
 
-//  public List<Student> searchStudentList() {
-//    // 検索処理 Repositoryの情報をServiceで使えるように、studentListという変数につめた
-//    List<Student> studentList = repository.searchStudent();
-//
-//    // 課題① 24_Read処理のServiceとController部分を実装
-//    // 絞り込みを行う。年齢が30代の人のみを抽出する。
-//    // 抽出したリストをControllerに返す。
-//    List<Student> filteredList = studentList.stream()
-//        .filter(i -> i.getAge() >= 30 && i.getAge() <= 39)
-//        .toList();
-//
-//    return filteredList;
-//  }
-
-  public List<Integer> searchStudentId() {
-    return repository.searchStudentId();
-  }
-
-  public Student getStudentId(@PathVariable int id) {
-    return repository.searchStudentById(id);
-  }
-
-  public Student searchStudentById(int id) {
-    return repository.searchStudentById(id);
-  }
-
-  public List<String> searchStudentName() {
-    return repository.searchStudentName();
-  }
-
-  public List<String> searchStudentFurigana() {
-    return repository.searchStudentFurigana();
-  }
-
-  public List<String> searchStudentNickname() {
-    return repository.searchStudentNickname();
-  }
-
-  public List<String> searchStudentEmail() {
-    return repository.searchStudentEmail();
-  }
-
-  public List<String> searchStudentArea() {
-    return repository.searchStudentArea();
-  }
-
-  public List<String> searchStudentAge() {
-    return repository.searchStudentAge();
-  }
-
-  public List<String> searchStudentGender() {
-    return repository.searchStudentGender();
-  }
-
-  public List<StudentsCourses> searchStudentsCoursesList() {
-    return repository.searchStudentsCoursesList();
-  }
-
+  /**
+   * 受講生検索機能です
+   *  IDに基づく受講生の情報を取得したあと、その受講生に紐づく受講生コース情報を取得して設定します。
+   *
+   * @param studentId 受講生ID
+   * @return 受講生情報
+   */
   public StudentDetail searchStudent(String studentId) {
     Student student = repository.searchStudentOne(studentId);
     List<StudentsCourses> studentsCourses = repository.searchStudentsCourses(student.getStudentId());
-
-    StudentDetail studentDetail = new StudentDetail();
-
-    studentDetail.setStudent(student);
-    studentDetail.setStudentsCourses(studentsCourses);
-
-    return studentDetail;
+    return new StudentDetail(student,studentsCourses);
   }
 
-  // voidの理由：登録するだけなので、voidで返り値なしとする
-  // 自分のコード
-//  @Transactional
-//  public void registerStudent(StudentDetail studentDetail) {
-//    repository.registerStudent(studentDetail);
-//  }
-
-  // 29_のコード
   @Transactional
-  public void registerStudent(StudentDetail studentDetail) {
+  public StudentDetail registerStudent(StudentDetail studentDetail) {
     repository.registerStudent(studentDetail.getStudent());
 
     for (StudentsCourses studentsCourses:studentDetail.getStudentsCourses()) {
@@ -117,6 +63,7 @@ public class StudentService {
       studentsCourses.setEndDate(Timestamp.valueOf(LocalDateTime.now()));
       repository.registerStudentsCourses(studentsCourses);
     }
+    return studentDetail;
   }
 
   @Transactional

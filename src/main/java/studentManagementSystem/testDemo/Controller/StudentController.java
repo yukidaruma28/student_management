@@ -21,86 +21,44 @@ import studentManagementSystem.testDemo.domain.StudentDetail;
 import studentManagementSystem.testDemo.repository.StudentRepository;
 import studentManagementSystem.testDemo.service.StudentService;
 
+/**
+ * 受講生の検索や登録、更新を行うREST APIとして受け付けるControllerです
+ */
 @RestController
 public class StudentController {
 
   private StudentService service;
-  private StudentConverter converter;
+
 
   @Autowired
-  public StudentController(StudentService service, StudentConverter converter) {
+  public StudentController(StudentService service) {
     this.service = service;
-    this.converter = converter;
+
   }
 
-  // 全件取得
+  /**
+   * 受講生検索一覧機能です
+   * 全件検索を実行します
+   * 条件指定検索は実行しません
+   * @return 受講生一覧(全件)
+   */
   @GetMapping("/studentList")
   public List<StudentDetail> getStudentList() {
-    List<Student> students = service.searchStudentList();
-    List<StudentsCourses> studentsCourses = service.searchStudentsCoursesList();
-    return converter.convertStudentDetails(students, studentsCourses);
+    return service.searchStudentList();
   }
 
-
-
-  // ID全件取得
-  @GetMapping("/studentId")
-  public List<Integer> getStudentId() {
-    return service.searchStudentId();
+  /**
+   * 受講生検索機能です
+   * IDに基づく任意の受講生の情報を取得します
+   *
+   * @param studentId 受講生ID
+   * @return 受講生情報
+   */
+  @GetMapping("/student/{studentId}")
+  public StudentDetail getStudent(@PathVariable String studentId) {
+    return service.searchStudent(studentId);
   }
 
-  // 指定したIDの情報を一括取得
-  // 動的処理参考文献
-  // https://poco-tech.com/posts/spring-boot-introduction/path-variable-annotation/
-  // https://annotations-lab.com/pathvariable%E3%81%AE%E4%BD%BF%E3%81%84%E6%96%B9%E3%81%A8%E5%BC%95%E6%95%B0%E3%82%92%E5%BE%B9%E5%BA%95%E8%A7%A3%E8%AA%AC%EF%BC%81%E3%80%90%E5%88%9D%E5%BF%83%E8%80%85%E5%90%91%E3%81%91%E3%80%91/
-
-//  // 正規表現で数字のみを入力するようにした
-//  @GetMapping("/student/{id:[0-9]+}")
-//  public Student getStudentId(@PathVariable int id) {
-//    return service.searchStudentById(id);
-//  }
-
-  // 名前全件取得
-  @GetMapping("/studentName")
-  public List<String> getStudentName() {
-    return service.searchStudentName();
-  }
-
-  // ふりがな全件取得
-  @GetMapping("/studentFurigana")
-  public List<String> getStudentFurigana() {
-    return service.searchStudentFurigana();
-  }
-
-  // ニックネーム全件取得
-  @GetMapping("/studentNickname")
-  public List<String> getStudentNickname() {
-    return service.searchStudentNickname();
-  }
-
-  // メールアドレス全件取得
-  @GetMapping("/studentEmail")
-  public List<String> getStudentEmail() {
-    return service.searchStudentEmail();
-  }
-
-  // 居住地全件取得
-  @GetMapping("/studentArea")
-  public List<String> getStudentArea() {
-    return service.searchStudentArea();
-  }
-
-  // 年齢全件取得
-  @GetMapping("/studentAge")
-  public List<String> getStudentAge() {
-    return service.searchStudentAge();
-  }
-
-  // 性別全件取得
-  @GetMapping("/studentGender")
-  public List<String> getStudentGender() {
-    return service.searchStudentGender();
-  }
 
   @GetMapping("/newStudent")
   public String newStudent(Model model) {
@@ -112,21 +70,11 @@ public class StudentController {
 
 
   @PostMapping ("/registerStudent")
-  public String registerStudent(@ModelAttribute StudentDetail studentDetail, BindingResult result) {
-    if (result.hasErrors()) { // エラーが起きたときに、元の画面に戻る処理
-      return ("registerStudent");
-    }
-    service.registerStudent(studentDetail);
-    return "redirect:/studentList";
+  public ResponseEntity<StudentDetail> registerStudent(@RequestBody StudentDetail studentDetail) {
+    StudentDetail responseStudentDetail = service.registerStudent(studentDetail);
+    return ResponseEntity.ok(responseStudentDetail);
   }
 
-  // 受講生更新
-  @GetMapping("/student/{studentId}")
-  public String getStudent(@PathVariable String studentId, Model model) {
-    StudentDetail studentDetail = service.searchStudent(studentId);
-    model.addAttribute("studentDetail", studentDetail);
-    return "updateStudent";
-  }
 
   @PostMapping ("/updateStudent")
   public ResponseEntity<String> updateStudent(@RequestBody StudentDetail studentDetail) {
