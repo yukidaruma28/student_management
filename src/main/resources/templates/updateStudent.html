@@ -48,22 +48,22 @@
     <br>
   </div>
 
-  <div th:each="course, stat : *{studentsCourses}">
+  <div th:each="course, stat : *{studentCours}">
 <!--    動画講座内のコード-->
 <!--    <label for="studentsCoursesId"-->
-<!--           th:for="studentsCourses.__${stat.index}__.courseName">受講コースID</label>-->
-<!--    <input type="text" id="studentsCoursesId" th:id="studentsCourses.__${stat.index}__.studentsCoursesId"-->
-<!--           th:field="*{studentsCourses[__${stat.index}__].studentsCoursesId}">-->
+<!--           th:for="studentCours.__${stat.index}__.courseName">受講コースID</label>-->
+<!--    <input type="text" id="studentsCoursesId" th:id="studentCours.__${stat.index}__.studentsCoursesId"-->
+<!--           th:field="*{studentCours[__${stat.index}__].studentsCoursesId}">-->
 
 <!--    hiddenにして、IDを隠しつつ、取得した-->
     <input type="hidden" id="studentsCoursesId"
-           th:id="studentsCourses.__${stat.index}__.studentsCoursesId"
-           th:field="*{studentsCourses[__${stat.index}__].studentsCoursesId}">
+           th:id="studentCours.__${stat.index}__.studentsCoursesId"
+           th:field="*{studentCours[__${stat.index}__].studentsCoursesId}">
 
     <label for="courseName"
-           th:for="studentsCourses.__${stat.index}__.courseName">受講コース名</label>
-    <input type="text" id="courseName" th:id="studentsCourses.__${stat.index}__.courseName"
-           th:field="*{studentsCourses[__${stat.index}__].courseName}">
+           th:for="studentCours.__${stat.index}__.courseName">受講コース名</label>
+    <input type="text" id="courseName" th:id="studentCours.__${stat.index}__.courseName"
+           th:field="*{studentCours[__${stat.index}__].courseName}">
   </div>
 
   <div>

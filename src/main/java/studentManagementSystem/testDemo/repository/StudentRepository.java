@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import studentManagementSystem.testDemo.data.Student;
-import studentManagementSystem.testDemo.data.StudentsCourses;
+import studentManagementSystem.testDemo.data.StudentCourse;
 
 /**
  * 受講生情報テーブルと受講生コース情報テーブルと紐づくRepositoryです
@@ -38,7 +38,7 @@ public interface StudentRepository {
    * @return 受講生コース情報(全件)
    */
   @Select("SELECT * FROM students_courses")
-  List<StudentsCourses> searchStudentsCoursesList();
+  List<StudentCourse> searchStudentCourseList();
 
   /**
    * 受講生コース情報に紐づく受講生コース情報の検索を行います
@@ -47,28 +47,50 @@ public interface StudentRepository {
    * @return 受講生IDに紐づく受講生コース情報
    */
   @Select("SELECT * FROM students_courses WHERE studentId = #{studentId}")
-  List<StudentsCourses> searchStudentsCourses(String studentId);
+  List<StudentCourse> searchStudentCourse(String studentId);
 
 
+  /**
+   * 受講生を新規登録します
+   * IDについては自動採番を行います
+   *
+   * @param student 受講生
+   */
   @Insert("INSERT INTO student(name, furigana, nickname, email, area, age, gender, remark, is_deleted) "
       + "VALUES(#{name}, #{furigana}, #{nickname}, #{email}, #{area}, #{age}, #{gender}, #{remark}, false)")
   @Options(useGeneratedKeys = true, keyProperty = "studentId")
 
   void registerStudent(Student student);
 
+  /**
+   * 受講生コース情報を新規登録します
+   * IDについては自動採番を行います
+   *
+   * @param studentCourse 受講生コース情報
+   */
   @Insert("INSERT INTO students_courses (studentId, course_name, course_start_date, end_date) "
       + "VALUES (#{studentId}, #{courseName}, #{startDate}, #{endDate})")
   @Options(useGeneratedKeys = true, keyProperty = "studentsCoursesId")
 
-  void registerStudentsCourses(StudentsCourses studentsCourses);
+  void registerStudentCourse(StudentCourse studentCourse);
 
+  /**
+   * 受講生を更新します
+   *
+   * @param student 受講生
+   */
   @Update("UPDATE student SET name = #{name}, furigana = #{furigana}, nickname = #{nickname}, "
       + "email = #{email}, area = #{area}, age = #{age}, gender = #{gender}, remark = #{remark}, is_deleted = #{isDeleted} "
       + "WHERE studentId = #{studentId}")
 
   void updateStudent(Student student);
 
+  /**
+   * 受講生コース情報を更新します
+   *
+   * @param studentCourse 受講生コース情報
+   */
   @Update("UPDATE students_courses SET course_name = #{courseName} WHERE students_courses_id = #{studentsCoursesId}")
 
-  void updateStudentsCourses(StudentsCourses studentsCourses);
+  void updateStudentCourse(StudentCourse studentCourse);
 }

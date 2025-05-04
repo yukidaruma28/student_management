@@ -7,7 +7,6 @@ import lombok.Setter;
 @Getter
 @Setter
 
-// studentテーブルで持つカラムをここでもたせる
 public class Student {
 
   private String studentId;
@@ -22,7 +21,3 @@ public class Student {
   private boolean isDeleted; // 論理削除
 
 }
-
-// チャレンジ課題
-// ALTER TABLE student ADD remark VARCHAR(255) AFTER gender;
-// ALTER TABLE student ADD isDeleted VARCHAR(255) AFTER remark;

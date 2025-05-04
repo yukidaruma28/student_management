@@ -41,11 +41,11 @@
     <br>
   </div>
 
-  <div th:each="course, stat : *{studentsCourses}">
+  <div th:each="course, stat : *{studentCours}">
     <label for="courseName"
-           th:for="studentsCourses.__${stat.index}__.courseName">受講コース名</label>
-    <input type="text" id="courseName" th:id="studentsCourses.__${stat.index}__.courseName"
-           th:field="*{studentsCourses[__${stat.index}__].courseName}">
+           th:for="studentCours.__${stat.index}__.courseName">受講コース名</label>
+    <input type="text" id="courseName" th:id="studentCours.__${stat.index}__.courseName"
+           th:field="*{studentCours[__${stat.index}__].courseName}">
   </div>
 
   <div>
