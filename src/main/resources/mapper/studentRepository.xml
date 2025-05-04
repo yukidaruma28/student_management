@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="studentManagementSystem.testDemo.repository.StudentRepository">
+
+  <!-- 受講生の全件検索 -->
+  <select id="searchStudent" resultType="studentManagementSystem.testDemo.data.Student">
+    SELECT * FROM student
+  </select>
+
+  <!-- 受講生の単一検索 -->
+  <select id="searchStudentOne" resultType="studentManagementSystem.testDemo.data.Student">
+    SELECT * FROM student WHERE studentId = #{studentId}
+  </select>
+
+  <!--
+  課題：すべてのSQL文をxmlに移行する
+  @Insertや@Updateの書き方も調べたら出てくる
+   -->
+
+  <!-- 受講生コース情報の全件検索 -->
+  <select id="searchStudentCourseList" resultType="studentManagementSystem.testDemo.data.StudentCourse">
+    SELECT * FROM students_courses
+  </select>
+
+  <!-- 受講生コース情報に紐づく受講生コース情報の検索 -->
+  <select id="searchStudentCourse" resultType="studentManagementSystem.testDemo.data.StudentCourse">
+    SELECT * FROM students_courses WHERE studentId = #{studentId}
+  </select>
+
+  <!-- 受講生の新規登録 IDについては自動採番 -->
+  <insert id="registerStudent" useGeneratedKeys="true" keyProperty="studentId">
+    INSERT INTO student
+    (
+    name
+    ,furigana
+    ,nickname
+    ,email
+    ,area
+    ,age
+    ,gender
+    ,remark
+    ,is_deleted
+    )
+    VALUES
+    (
+    #{name}
+    ,#{furigana}
+    ,#{nickname}
+    ,#{email}
+    ,#{area}
+    ,#{age}
+    ,#{gender}
+    ,#{remark}
+    ,false
+    )
+  </insert>
+
+  <!-- 受講生コース情報の新規登録 IDについては自動採番 -->
+  <insert id="students_courses" useGeneratedKeys="true" keyProperty="studentsCoursesId">
+    INSERT INTO student
+    (
+    studentId
+    ,course_name
+    ,course_start_date
+    ,end_date
+    )
+    VALUES
+    (
+    #{studentId}
+    ,#{courseName}
+    ,#{nickname}
+    ,#{startDate}
+    ,#{endDate}
+    )
+  </insert>
+
+  <!-- 受講生更新 -->
+  <update id="updateStudent">
+    UPDATE
+      student
+    SET
+      name = #{name},
+      furigana = #{furigana},
+      nickname = #{nickname},
+      email = #{email},
+      area = #{area},
+      age = #{age},
+      gender = #{gender},
+      remark = #{remark},
+      is_deleted = #{isDeleted}
+    WHERE
+      studentId = #{studentId}
+  </update>
+
+  <!-- 受講生コース情報更新 -->
+  <update id="updateStudentCourse">
+    UPDATE
+      students_courses
+    SET
+      course_name = #{courseName}
+    WHERE
+      students_courses_id = #{studentsCoursesId}
+  </update>
+</mapper>
