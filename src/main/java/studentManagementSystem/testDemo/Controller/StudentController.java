@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import studentManagementSystem.testDemo.data.StudentCourse;
 import studentManagementSystem.testDemo.domain.StudentDetail;
+import studentManagementSystem.testDemo.exception.ErrorMessages;
 import studentManagementSystem.testDemo.exception.TestException;
 import studentManagementSystem.testDemo.service.StudentService;
 
@@ -46,9 +47,8 @@ public class StudentController {
    * @return 受講生詳細一覧(全件)
    */
   @GetMapping("/studentList")
-  public List<StudentDetail> getStudentList() throws TestException {
-    throw new TestException("TestException エラーが発生しました");
-//    return service.searchStudentList();
+  public List<StudentDetail> getStudentList() {
+    return service.searchStudentList();
   }
 
   /**
@@ -97,11 +97,10 @@ public class StudentController {
     return ResponseEntity.ok("更新処理が成功しました。");
   }
 
-  // 課題36 ExceptionHandlerをController以外でも動くように、classで例外処理ができる
-  // Controllerとかで、パッケージhandlerを作り、 ExceptionHandlingをする、専用のclassを作って、例外処理を実装する
-  // 例外を発生させるように専用のメソッドを作る -> テキトーなclassを作る -> 例外処理が継続してできるようにする
-  @ExceptionHandler(TestException.class)
-  public ResponseEntity<String> handleTestException(TestException ex) {
-     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+
+  // 例外処理用のメソッド
+  @GetMapping("/exceptionStudentList")
+  public List<StudentDetail> handleTestException() throws TestException {
+    throw new TestException("TestException:" + ErrorMessages.TestException);
   }
 }
