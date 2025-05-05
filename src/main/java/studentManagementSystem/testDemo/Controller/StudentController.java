@@ -25,6 +25,9 @@ import studentManagementSystem.testDemo.exception.ErrorMessages;
 import studentManagementSystem.testDemo.exception.TestException;
 import studentManagementSystem.testDemo.service.StudentService;
 
+// 38_ドキュメントの必要性と作り方 課題
+// ControllerにおけるOpenAPIをすべて実装する
+
 /**
  * 受講生の検索や登録、更新を行うREST APIとして受け付けるControllerです
  */
