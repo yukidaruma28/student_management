@@ -90,7 +90,7 @@ public class StudentController {
       description = "受講生ID",
       example = "1"
   )
-  @GetMapping("/student/{studentId}")
+  @GetMapping("/students/{studentId}")
   public StudentDetail getStudent(
       @PathVariable @NotBlank @Pattern(regexp = "^\\d+$") String studentId) {
     return service.searchStudent(studentId);
