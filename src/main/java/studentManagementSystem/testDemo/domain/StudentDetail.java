@@ -17,9 +17,11 @@ import studentManagementSystem.testDemo.data.StudentCourse;
 @AllArgsConstructor
 public class StudentDetail {
 
+  @Schema(description = "受講生")
   @Valid
   private Student student;
 
+  @Schema(description = "受講生コース情報")
   @Valid
   private List<StudentCourse> studentCourseList;
 
