@@ -1,6 +1,13 @@
 package studentManagementSystem.testDemo.Controller;
 
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -12,6 +19,7 @@ import org.springframework.ui.Model;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,10 +35,23 @@ import studentManagementSystem.testDemo.service.StudentService;
 
 // 38_ドキュメントの必要性と作り方 課題
 // ControllerにおけるOpenAPIをすべて実装する
+// https://qiita.com/Omi354/items/e52401971354cf2b4317
+// https://qiita.com/crml1206/items/e47ec484af750d301953
+// https://staff.persol-xtech.co.jp/hatalabo/it_engineer/527.html
 
 /**
  * 受講生の検索や登録、更新を行うREST APIとして受け付けるControllerです
  */
+@OpenAPIDefinition(info = @Info(
+    title = "受講生とコース情報の登録、検索、更新、論理削除の処理",
+    description = "受講生と受講生コースの情報を登録、検索、更新、論理削除を行うControllerです。"
+))
+@ApiResponses({
+    @ApiResponse(responseCode = "200", description = "成功"),
+    @ApiResponse(responseCode = "400", description = "リクエストエラー（バリデーションなど）"),
+    @ApiResponse(responseCode = "404", description = "データが見つかりません"),
+    @ApiResponse(responseCode = "500", description = "サーバーエラー")
+})
 @Validated
 @RestController
 public class StudentController {
@@ -63,19 +84,16 @@ public class StudentController {
    * @param studentId 受講生ID
    * @return 受講生情報
    */
+  @Operation(summary = "単一検索", description = "受講生のIDに基づく情報を取得します")
+  @Parameter(
+      name = "studentId",
+      description = "受講生ID",
+      example = "1"
+  )
   @GetMapping("/student/{studentId}")
   public StudentDetail getStudent(
       @PathVariable @NotBlank @Pattern(regexp = "^\\d+$") String studentId) {
     return service.searchStudent(studentId);
-  }
-
-
-  @GetMapping("/newStudent")
-  public String newStudent(Model model) {
-    StudentDetail studentDetail = new StudentDetail();
-    studentDetail.setStudentCourseList(Arrays.asList(new StudentCourse()));
-    model.addAttribute("studentDetail", studentDetail);
-    return "registerStudent";
   }
 
   /**
@@ -97,6 +115,7 @@ public class StudentController {
    * @param studentDetail
    * @return
    */
+  @Operation(summary = "受講生更新", description = "受講生詳細の更新をします。論理削除も行います。")
   @PutMapping("/updateStudent")
   public ResponseEntity<String> updateStudent(@RequestBody @Valid StudentDetail studentDetail) {
     service.updateStudent(studentDetail);
@@ -104,7 +123,7 @@ public class StudentController {
   }
 
 
-  // 例外処理用のメソッド
+  @Operation(summary = "例外処理", description = "例外処理を行います。")
   @GetMapping("/exceptionStudentList")
   public List<StudentDetail> handleTestException() throws TestException {
     throw new TestException("TestException:" + ErrorMessages.TestException);
