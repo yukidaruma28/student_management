@@ -1,13 +1,17 @@
 package studentManagementSystem.testDemo.Controller;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import java.util.Arrays;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import studentManagementSystem.testDemo.data.StudentCourse;
 import studentManagementSystem.testDemo.domain.StudentDetail;
+import studentManagementSystem.testDemo.exception.ErrorMessages;
+import studentManagementSystem.testDemo.exception.TestException;
 import studentManagementSystem.testDemo.service.StudentService;
 
 /**
@@ -53,7 +59,8 @@ public class StudentController {
    * @return 受講生情報
    */
   @GetMapping("/student/{studentId}")
-  public StudentDetail getStudent(@PathVariable @Size(min = 1, max = 3) String studentId) {
+  public StudentDetail getStudent(
+      @PathVariable @NotBlank @Pattern(regexp = "^\\d+$") String studentId) {
     return service.searchStudent(studentId);
   }
 
@@ -72,7 +79,8 @@ public class StudentController {
    * @return 実行結果
    */
   @PostMapping ("/registerStudent")
-  public ResponseEntity<StudentDetail> registerStudent(@RequestBody StudentDetail studentDetail) {
+  public ResponseEntity<StudentDetail> registerStudent(
+      @RequestBody @Valid StudentDetail studentDetail) {
     StudentDetail responseStudentDetail = service.registerStudent(studentDetail);
     return ResponseEntity.ok(responseStudentDetail);
   }
@@ -84,8 +92,15 @@ public class StudentController {
    * @return
    */
   @PutMapping("/updateStudent")
-  public ResponseEntity<String> updateStudent(@RequestBody StudentDetail studentDetail) {
+  public ResponseEntity<String> updateStudent(@RequestBody @Valid StudentDetail studentDetail) {
     service.updateStudent(studentDetail);
     return ResponseEntity.ok("更新処理が成功しました。");
+  }
+
+
+  // 例外処理用のメソッド
+  @GetMapping("/exceptionStudentList")
+  public List<StudentDetail> handleTestException() throws TestException {
+    throw new TestException("TestException:" + ErrorMessages.TestException);
   }
 }
