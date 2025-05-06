@@ -1,18 +1,17 @@
 package studentManagementSystem.testDemo.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.assertArg;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import studentManagementSystem.testDemo.Controller.converter.StudentConverter;
 import studentManagementSystem.testDemo.data.Student;
@@ -31,6 +30,10 @@ class StudentServiceTest {
   private StudentConverter converter;
 
   private StudentService sut;
+  private StudentDetail studentDetail = new StudentDetail();
+  private Student student = new Student();
+  private List<StudentCourse> studentCourses = new ArrayList<>();
+  private List<StudentCourse> studentCourseList = new ArrayList<>();
 
   // メソッド全体でやりたいことは、先にまとめておく
   @BeforeEach
@@ -45,10 +48,9 @@ class StudentServiceTest {
 
 
   @Test
-  void 受講生詳細の検索_リポジトリーとコンバーターが適切に呼び出せていること() {
+  void 受講生詳細の検索_リポジトリとコンバーターが適切に呼び出せていること() {
     // 事前準備
     // ①List<StudentDetail> expected = new ArrayList<>(); // actualがうまくいけば、expectedに入る
-
     List<Student> studentList = new ArrayList<>();
     List<StudentCourse> studentCourseList = new ArrayList<>();
 
@@ -68,5 +70,88 @@ class StudentServiceTest {
     verify(converter, times(1)).convertStudentDetails(studentList, studentCourseList);
 
     // 後処理：DBに変更を加えてしまうときは、ここで直す
+  }
+
+  @Test
+  void 受講生詳細検索機能_リポジトリが適切に呼び出せていること() {
+
+//    // 検証するServiceのコード
+//    Student student = repository.searchStudentOne(studentId);
+//    List<StudentCourse> studentCourses = repository.searchStudentCourse(student.getStudentId());
+//    return new StudentDetail(student, studentCourses);
+    // todo studentにおけるリポジトリが呼び出せている
+    // todo studentCourseにおけるリポジトリが呼び出せている
+    // todo StudentDetailの中身におけるstudentとstudentCourseが、上記の2つと一致している
+
+    // 準備
+    String studentId = "1";
+    student.setStudentId(studentId);
+
+    when(repository.searchStudentOne(studentId)).thenReturn(student);
+    when(repository.searchStudentCourse(studentId)).thenReturn(studentCourses);
+
+    // 実行
+    StudentDetail actual = sut.searchStudent(studentId);
+
+    // 検証
+    verify(repository, times(1)).searchStudentOne(studentId);
+    verify(repository, times(1)).searchStudentCourse(student.getStudentId());
+    assertEquals(student, actual.getStudent());
+    assertEquals(studentCourses, actual.getStudentCourseList());
+
+  }
+
+  @Test
+  void 受講生と受講生コース情報の登録_適切に定義を行ってリポジトリが呼び出せていること() {
+//    // 検証するServiceのコード
+//    public StudentDetail registerStudent(StudentDetail studentDetail) {
+//    Student student = studentDetail.getStudent();
+//
+//    repository.registerStudent(student);
+//    studentDetail.getStudentCourseList().forEach(studentsCourses -> {
+//      initStudentsCourse(studentsCourses, student);
+//      repository.registerStudentCourse(studentsCourses);
+//    });
+//    return studentDetail;
+//  }
+
+    // todo studentとstudentCourseListを定義する
+    // todo studentと、studentDetailのgetStudentとの値が一致している
+    // todo repositoryの引数がstudentCourseと一致している
+
+    // 準備
+    studentDetail.setStudent(student);
+    studentDetail.setStudentCourseList(studentCourseList);
+
+    // 実行
+    StudentDetail actual = sut.registerStudent(studentDetail);
+
+    // 検証
+    verify(repository, times(1)).registerStudent(student);
+    assertEquals(actual, studentDetail);
+
+  }
+
+  @Test
+  void 受講生と受講生コース情報の更新_適切に定義を行いリポジトリが呼び出せていること() {
+//    // 検証するServiceのコード
+//    void testUpdateStudent(StudentDetail studentDetail) {
+//    repository.updateStudent(studentDetail.getStudent());
+//    studentDetail.getStudentCourseList()
+//        .forEach(studentCourse -> repository.updateStudentCourse(studentCourse));
+//  }
+    // todo updateStudentを定義する
+    // todo studentDetail.getStudentCourseListを使えるようにする
+
+    // 準備
+    studentDetail.setStudent(student);
+    studentDetail.setStudentCourseList(studentCourseList);
+
+    // 実行
+    sut.testUpdateStudent(studentDetail);
+
+    // 検証
+    verify(repository, times(1)).updateStudent(student);
+
   }
 }
