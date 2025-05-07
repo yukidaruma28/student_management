@@ -96,12 +96,4 @@ public class StudentService {
     studentDetail.getStudentCourseList()
         .forEach(studentCourse -> repository.updateStudentCourse(studentCourse));
   }
-
-  // 受講生詳細の更新に関するテストを行います
-  @Transactional
-  void testUpdateStudent(StudentDetail studentDetail) {
-    repository.updateStudent(studentDetail.getStudent());
-    studentDetail.getStudentCourseList()
-        .forEach(studentCourse -> repository.updateStudentCourse(studentCourse));
-  }
 }

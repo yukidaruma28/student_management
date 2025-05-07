@@ -6,7 +6,9 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,10 +37,30 @@ class StudentServiceTest {
   private List<StudentCourse> studentCourses = new ArrayList<>();
   private List<StudentCourse> studentCourseList = new ArrayList<>();
 
+
+
   // メソッド全体でやりたいことは、先にまとめておく
   @BeforeEach
   void before() {
     sut = new StudentService(repository, converter);
+
+    StudentCourse studentCourses = new StudentCourse();
+    studentCourses.setStudentsCoursesId("1");
+    studentCourses.setStudentId("1");
+    studentCourses.setCourseName("Javaコース");
+    studentCourses.setStartDate(Timestamp.valueOf("2025-08-01 00:00:00"));
+    studentCourses.setEndDate(Timestamp.valueOf("2025-08-01 00:00:00"));
+
+    student.setStudentId("1");
+    student.setName("山田太郎");
+    student.setFurigana("やまだたろう");
+    student.setNickname("タロ");
+    student.setEmail("taro@example.com");
+    student.setArea("兵庫");
+    student.setAge(20);
+    student.setGender("男性");
+    student.setRemark("未経験転職するために、東京へ上京予定。");
+    student.setIsDeleted(false);
 
   }
 
@@ -135,11 +157,11 @@ class StudentServiceTest {
   @Test
   void 受講生と受講生コース情報の更新_適切に定義を行いリポジトリが呼び出せていること() {
 //    // 検証するServiceのコード
-//    void testUpdateStudent(StudentDetail studentDetail) {
-//    repository.updateStudent(studentDetail.getStudent());
-//    studentDetail.getStudentCourseList()
-//        .forEach(studentCourse -> repository.updateStudentCourse(studentCourse));
-//  }
+//    public void updateStudent(StudentDetail studentDetail) {
+//      repository.updateStudent(studentDetail.getStudent());
+//      studentDetail.getStudentCourseList()
+//          .forEach(studentCourse -> repository.updateStudentCourse(studentCourse));
+//    }
     // todo updateStudentを定義する
     // todo studentDetail.getStudentCourseListを使えるようにする
 
@@ -148,7 +170,7 @@ class StudentServiceTest {
     studentDetail.setStudentCourseList(studentCourseList);
 
     // 実行
-    sut.testUpdateStudent(studentDetail);
+    sut.updateStudent(studentDetail);
 
     // 検証
     verify(repository, times(1)).updateStudent(student);
