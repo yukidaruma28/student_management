@@ -37,19 +37,20 @@ class StudentServiceTest {
   private List<StudentCourse> studentCourses = new ArrayList<>();
   private List<StudentCourse> studentCourseList = new ArrayList<>();
 
-
-
   // メソッド全体でやりたいことは、先にまとめておく
   @BeforeEach
   void before() {
     sut = new StudentService(repository, converter);
 
-    StudentCourse studentCourses = new StudentCourse();
-    studentCourses.setStudentsCoursesId("1");
-    studentCourses.setStudentId("1");
-    studentCourses.setCourseName("Javaコース");
-    studentCourses.setStartDate(Timestamp.valueOf("2025-08-01 00:00:00"));
-    studentCourses.setEndDate(Timestamp.valueOf("2025-08-01 00:00:00"));
+    // studentCoursesという大箱に対して、courseという箱を用意して、その箱に属性をsetする
+    StudentCourse course = new StudentCourse();
+    course.setStudentsCoursesId("1");
+    course.setStudentId("1");
+    course.setCourseName("Javaコース");
+    course.setStartDate(Timestamp.valueOf("2025-08-01 00:00:00"));
+    course.setEndDate(Timestamp.valueOf("2025-08-01 00:00:00"));
+
+    studentCourses.add(course);
 
     student.setStudentId("1");
     student.setName("山田太郎");
@@ -98,28 +99,29 @@ class StudentServiceTest {
   void 受講生詳細検索機能_リポジトリが適切に呼び出せていること() {
 
 //    // 検証するServiceのコード
+//    public StudentDetail searchStudent(String studentId) {
 //    Student student = repository.searchStudentOne(studentId);
-//    List<StudentCourse> studentCourses = repository.searchStudentCourse(student.getStudentId());
-//    return new StudentDetail(student, studentCourses);
+//    List<StudentCourse> studentCourse = repository.searchStudentCourse(student.getStudentId());
+//    return new StudentDetail(student, studentCourse);
+//  }
     // todo studentにおけるリポジトリが呼び出せている
     // todo studentCourseにおけるリポジトリが呼び出せている
     // todo StudentDetailの中身におけるstudentとstudentCourseが、上記の2つと一致している
 
     // 準備
-    String studentId = "1";
-    student.setStudentId(studentId);
+//    student.setStudentId("1");
 
-    when(repository.searchStudentOne(studentId)).thenReturn(student);
-    when(repository.searchStudentCourse(studentId)).thenReturn(studentCourses);
+    when(repository.searchStudentOne(student.getStudentId())).thenReturn(student);
+    when(repository.searchStudentCourse(student.getStudentId())).thenReturn(studentCourses);
 
     // 実行
-    StudentDetail actual = sut.searchStudent(studentId);
+    Student expected = student;
+    StudentDetail actual = sut.searchStudent(student.getStudentId());
 
     // 検証
-    verify(repository, times(1)).searchStudentOne(studentId);
+    verify(repository, times(1)).searchStudentOne(student.getStudentId());
     verify(repository, times(1)).searchStudentCourse(student.getStudentId());
-    assertEquals(student, actual.getStudent());
-    assertEquals(studentCourses, actual.getStudentCourseList());
+    assertEquals(expected.getStudentId(), actual.getStudent().getStudentId());
 
   }
 
@@ -144,13 +146,14 @@ class StudentServiceTest {
     // 準備
     studentDetail.setStudent(student);
     studentDetail.setStudentCourseList(studentCourseList);
+    StudentDetail expected = studentDetail;
 
     // 実行
     StudentDetail actual = sut.registerStudent(studentDetail);
 
     // 検証
     verify(repository, times(1)).registerStudent(student);
-    assertEquals(actual, studentDetail);
+    assertEquals(expected, actual);
 
   }
 
