@@ -23,10 +23,10 @@ public class StudentCourse {
   @Schema(description = "受講コース名", example = "Javaコース")
   private String courseName;
 
-  @Schema(description = "受講開始日", example = "2025-08-01T00:00:00.000+00:00")
+  @Schema(description = "受講開始日", example = "2025-08-01 00:00:00")
   private Timestamp startDate;
 
-  @Schema(description = "受講終了予定日", example = "2026-08-01T00:00:00.000+00:00")
+  @Schema(description = "受講終了予定日", example = "2025-08-01 00:00:00")
   private Timestamp endDate;
 
 }
