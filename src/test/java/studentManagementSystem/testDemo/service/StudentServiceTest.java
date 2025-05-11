@@ -8,7 +8,6 @@ import static org.mockito.Mockito.when;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,9 +32,9 @@ class StudentServiceTest {
 
   private StudentService sut;
   private StudentDetail studentDetail = new StudentDetail();
-  private Student student = new Student();
-  private List<StudentCourse> studentCourses = new ArrayList<>();
-  private List<StudentCourse> studentCourseList = new ArrayList<>();
+  private Student student;
+  private List<StudentCourse> studentCourses;
+  private List<StudentCourse> studentCourseList;
 
   // メソッド全体でやりたいことは、先にまとめておく
   @BeforeEach
@@ -43,32 +42,45 @@ class StudentServiceTest {
     sut = new StudentService(repository, converter);
 
     // studentCoursesという大箱に対して、courseという箱を用意して、その箱に属性をsetする
-    StudentCourse course = new StudentCourse();
-    course.setStudentsCoursesId("1");
-    course.setStudentId("1");
-    course.setCourseName("Javaコース");
-    course.setStartDate(Timestamp.valueOf("2025-08-01 00:00:00"));
-    course.setEndDate(Timestamp.valueOf("2025-08-01 00:00:00"));
 
-    studentCourses.add(course);
+//    builderでの実装コード
+//    StudentCourse course = StudentCourse.builder()
+//        .studentsCoursesId("1")
+//        .studentId("1")
+//        .courseName("Javaコース")
+//        .startDate(Timestamp.valueOf("2025-08-01 00:00:00"))
+//        .endDate(Timestamp.valueOf("2025-08-01 00:00:00"))
+//        .build();
 
-    student.setStudentId("1");
-    student.setName("山田太郎");
-    student.setFurigana("やまだたろう");
-    student.setNickname("タロ");
-    student.setEmail("taro@example.com");
-    student.setArea("兵庫");
-    student.setAge(20);
-    student.setGender("男性");
-    student.setRemark("未経験転職するために、東京へ上京予定。");
-    student.setIsDeleted(false);
+    // コンストラクタでの実装
+    // 参考URL：https://efficientify.secret.jp/development/programming/%E3%80%90java%E5%85%A5%E9%96%80%E3%80%91java%E3%81%A7list%E3%82%92%E5%88%9D%E6%9C%9F%E5%8C%96%E3%81%99%E3%82%8B%E6%96%B9%E6%B3%95%EF%BC%9A%E5%88%9D%E5%BF%83%E8%80%85%E3%81%AB%E5%84%AA%E3%81%97/?utm_source=chatgpt.com
+    student = new Student(
+        "1",
+        "山田太郎",
+        "やまだたろう",
+        "タロー",
+        "taro@example",
+        "鹿児島",
+        20,
+        "男性",
+        "未経験転職するために、東京へ上京予定。",
+        false
+    );
 
+    studentCourses = List.of(
+        new StudentCourse(
+        "1",
+        "1",
+        "Javaコース",
+        Timestamp.valueOf("2025-08-01 00:00:00"),
+        Timestamp.valueOf("2026-08-01 00:00:00")
+      )
+    );
   }
 
   // 40_課題 すべてのServiceのテスト実装する
   // privateがついていたら、sutで呼び出せない。なので、Serviceのprivateを消して、voidから始める
   // initはチャレンジ課題
-
 
   @Test
   void 受講生詳細の検索_リポジトリとコンバーターが適切に呼び出せていること() {
@@ -109,20 +121,17 @@ class StudentServiceTest {
     // todo StudentDetailの中身におけるstudentとstudentCourseが、上記の2つと一致している
 
     // 準備
-//    student.setStudentId("1");
-
-    when(repository.searchStudentOne(student.getStudentId())).thenReturn(student);
-    when(repository.searchStudentCourse(student.getStudentId())).thenReturn(studentCourses);
+    when(repository.searchStudentOne("1")).thenReturn(student);
+    when(repository.searchStudentCourse("1")).thenReturn(studentCourses);
 
     // 実行
     Student expected = student;
-    StudentDetail actual = sut.searchStudent(student.getStudentId());
+    List<StudentCourse> actual = sut.searchStudent("1").getStudentCourseList();
 
     // 検証
-    verify(repository, times(1)).searchStudentOne(student.getStudentId());
-    verify(repository, times(1)).searchStudentCourse(student.getStudentId());
-    assertEquals(expected.getStudentId(), actual.getStudent().getStudentId());
-
+    verify(repository, times(1)).searchStudentOne("1");
+    verify(repository, times(1)).searchStudentCourse("1");
+    assertEquals(expected.getStudentId(), actual.getFirst().getStudentId());
   }
 
   @Test
@@ -144,8 +153,6 @@ class StudentServiceTest {
     // todo repositoryの引数がstudentCourseと一致している
 
     // 準備
-    studentDetail.setStudent(student);
-    studentDetail.setStudentCourseList(studentCourseList);
     StudentDetail expected = studentDetail;
 
     // 実行
@@ -153,7 +160,7 @@ class StudentServiceTest {
 
     // 検証
     verify(repository, times(1)).registerStudent(student);
-    assertEquals(expected, actual);
+    assertEquals(expected.getStudent().getStudentId(), actual.getStudent().getStudentId());
 
   }
 

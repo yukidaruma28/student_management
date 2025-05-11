@@ -44,4 +44,18 @@ public class Student {
   @Schema(description = "論理削除", example = "1")
   private boolean isDeleted; // 論理削除
 
+  public Student (String studentId, String name, String furigana,
+      String nickname, String email, String area, int age, String gender, String remark, boolean isDeleted)
+  {
+    this.studentId = studentId;
+    this.name = name;
+    this.furigana = furigana;
+    this.nickname = nickname;
+    this.email = email;
+    this.area = area;
+    this.age = age;
+    this.gender = gender;
+    this.remark = remark;
+    this.isDeleted = isDeleted;
+  }
 }
