@@ -4,12 +4,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 @Schema(description = "受講生")
 @Getter
 @Setter
+@AllArgsConstructor
 
 public class Student {
   @Schema(description = "受講生IDを自動付与", example = "1")
@@ -44,18 +46,4 @@ public class Student {
   @Schema(description = "論理削除", example = "1")
   private boolean isDeleted; // 論理削除
 
-  public Student (String studentId, String name, String furigana,
-      String nickname, String email, String area, int age, String gender, String remark, boolean isDeleted)
-  {
-    this.studentId = studentId;
-    this.name = name;
-    this.furigana = furigana;
-    this.nickname = nickname;
-    this.email = email;
-    this.area = area;
-    this.age = age;
-    this.gender = gender;
-    this.remark = remark;
-    this.isDeleted = isDeleted;
-  }
 }

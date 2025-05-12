@@ -32,29 +32,15 @@ class StudentServiceTest {
 
   private StudentService sut;
   private StudentDetail studentDetail = new StudentDetail();
-  private Student student;
-  private List<StudentCourse> studentCourses;
-  private List<StudentCourse> studentCourseList;
 
   // メソッド全体でやりたいことは、先にまとめておく
   @BeforeEach
   void before() {
     sut = new StudentService(repository, converter);
 
-    // studentCoursesという大箱に対して、courseという箱を用意して、その箱に属性をsetする
-
-//    builderでの実装コード
-//    StudentCourse course = StudentCourse.builder()
-//        .studentsCoursesId("1")
-//        .studentId("1")
-//        .courseName("Javaコース")
-//        .startDate(Timestamp.valueOf("2025-08-01 00:00:00"))
-//        .endDate(Timestamp.valueOf("2025-08-01 00:00:00"))
-//        .build();
-
     // コンストラクタでの実装
     // 参考URL：https://efficientify.secret.jp/development/programming/%E3%80%90java%E5%85%A5%E9%96%80%E3%80%91java%E3%81%A7list%E3%82%92%E5%88%9D%E6%9C%9F%E5%8C%96%E3%81%99%E3%82%8B%E6%96%B9%E6%B3%95%EF%BC%9A%E5%88%9D%E5%BF%83%E8%80%85%E3%81%AB%E5%84%AA%E3%81%97/?utm_source=chatgpt.com
-    student = new Student(
+    Student student = new Student(
         "1",
         "山田太郎",
         "やまだたろう",
@@ -67,15 +53,17 @@ class StudentServiceTest {
         false
     );
 
-    studentCourses = List.of(
+    List<StudentCourse> studentCourses = List.of(
         new StudentCourse(
-        "1",
-        "1",
-        "Javaコース",
-        Timestamp.valueOf("2025-08-01 00:00:00"),
-        Timestamp.valueOf("2026-08-01 00:00:00")
-      )
+            "1",
+            "1",
+            "Javaコース",
+            Timestamp.valueOf("2025-08-01 00:00:00"),
+            Timestamp.valueOf("2026-08-01 00:00:00")
+        )
     );
+
+    studentDetail = new StudentDetail(student, studentCourses);
   }
 
   // 40_課題 すべてのServiceのテスト実装する
@@ -110,22 +98,16 @@ class StudentServiceTest {
   @Test
   void 受講生詳細検索機能_リポジトリが適切に呼び出せていること() {
 
-//    // 検証するServiceのコード
-//    public StudentDetail searchStudent(String studentId) {
-//    Student student = repository.searchStudentOne(studentId);
-//    List<StudentCourse> studentCourse = repository.searchStudentCourse(student.getStudentId());
-//    return new StudentDetail(student, studentCourse);
-//  }
     // todo studentにおけるリポジトリが呼び出せている
     // todo studentCourseにおけるリポジトリが呼び出せている
     // todo StudentDetailの中身におけるstudentとstudentCourseが、上記の2つと一致している
 
     // 準備
-    when(repository.searchStudentOne("1")).thenReturn(student);
-    when(repository.searchStudentCourse("1")).thenReturn(studentCourses);
+    when(repository.searchStudentOne("1")).thenReturn(studentDetail.getStudent());
+    when(repository.searchStudentCourse("1")).thenReturn(studentDetail.getStudentCourseList());
 
     // 実行
-    Student expected = student;
+    Student expected = studentDetail.getStudent();
     List<StudentCourse> actual = sut.searchStudent("1").getStudentCourseList();
 
     // 検証
@@ -136,17 +118,6 @@ class StudentServiceTest {
 
   @Test
   void 受講生と受講生コース情報の登録_適切に定義を行ってリポジトリが呼び出せていること() {
-//    // 検証するServiceのコード
-//    public StudentDetail registerStudent(StudentDetail studentDetail) {
-//    Student student = studentDetail.getStudent();
-//
-//    repository.registerStudent(student);
-//    studentDetail.getStudentCourseList().forEach(studentsCourses -> {
-//      initStudentsCourse(studentsCourses, student);
-//      repository.registerStudentCourse(studentsCourses);
-//    });
-//    return studentDetail;
-//  }
 
     // todo studentとstudentCourseListを定義する
     // todo studentと、studentDetailのgetStudentとの値が一致している
@@ -159,31 +130,24 @@ class StudentServiceTest {
     StudentDetail actual = sut.registerStudent(studentDetail);
 
     // 検証
-    verify(repository, times(1)).registerStudent(student);
-    assertEquals(expected.getStudent().getStudentId(), actual.getStudent().getStudentId());
+    verify(repository, times(1)).registerStudent(studentDetail.getStudent());
+    assertEquals(expected.getStudent().getStudentId(), actual.getStudentCourseList().getFirst().getStudentId());
 
   }
 
   @Test
   void 受講生と受講生コース情報の更新_適切に定義を行いリポジトリが呼び出せていること() {
-//    // 検証するServiceのコード
-//    public void updateStudent(StudentDetail studentDetail) {
-//      repository.updateStudent(studentDetail.getStudent());
-//      studentDetail.getStudentCourseList()
-//          .forEach(studentCourse -> repository.updateStudentCourse(studentCourse));
-//    }
+
     // todo updateStudentを定義する
     // todo studentDetail.getStudentCourseListを使えるようにする
 
     // 準備
-    studentDetail.setStudent(student);
-    studentDetail.setStudentCourseList(studentCourseList);
 
     // 実行
     sut.updateStudent(studentDetail);
 
     // 検証
-    verify(repository, times(1)).updateStudent(student);
+    verify(repository, times(1)).updateStudent(studentDetail.getStudent());
 
   }
 }
