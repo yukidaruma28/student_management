@@ -4,12 +4,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 @Schema(description = "受講生")
 @Getter
 @Setter
+@AllArgsConstructor
 
 public class Student {
   @Schema(description = "受講生IDを自動付与", example = "1")
