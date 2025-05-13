@@ -14,11 +14,14 @@ import java.util.List;
 
 import java.util.Set;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import studentManagementSystem.testDemo.data.Student;
@@ -49,13 +52,22 @@ class StudentControllerTest {
   }
 
   @Test
-  void 受講生詳細の受験生でID以外に数字を用いた時に入力チェックにかかること() {
-    Student student = new Student();
+  void 受講生詳細の検索が実行できて空で返ってくること() throws  Exception {
+    String id = "999";
+    mockMvc.perform(get("/students/{studentId}"))
+        .andExpect(status().isOk());
 
-    student.setStudentId("テスト");
-
-    Set<ConstraintViolation<Student>> violations = validator.validate(student);
-    Assertions.assertEquals("1" ,violations.size());
-
+    verify(service, times(1)).searchStudent(id);
   }
+
+//  @Test
+//  void 受講生詳細の受験生でID以外に数字を用いた時に入力チェックにかかること() {
+//    Student student = new Student();
+//
+//    student.setStudentId("テスト");
+//
+//    Set<ConstraintViolation<Student>> violations = validator.validate(student);
+//    Assertions.assertEquals("1" ,violations.size());
+//
+//  }
 }

@@ -3,6 +3,7 @@ package studentManagementSystem.testDemo.Controller.converter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import studentManagementSystem.testDemo.data.Student;
 import studentManagementSystem.testDemo.data.StudentCourse;
@@ -13,6 +14,7 @@ import studentManagementSystem.testDemo.domain.StudentDetail;
  * 受講生詳細を受講生や受講生コース情報、もしくはその逆の変換を行うコンバーターです
  */
 @Component
+@AllArgsConstructor
 public class StudentConverter {
 
   /**
