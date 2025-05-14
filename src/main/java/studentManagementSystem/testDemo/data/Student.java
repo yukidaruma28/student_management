@@ -7,11 +7,13 @@ import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Schema(description = "受講生")
 @Getter
 @Setter
 @AllArgsConstructor
+@ToString
 
 public class Student {
   @Schema(description = "受講生IDを自動付与", example = "1")
