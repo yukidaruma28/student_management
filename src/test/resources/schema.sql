@@ -1,0 +1,22 @@
+CREATE TABLE IF NOT EXISTS student (
+  studentId INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  furigana VARCHAR(255) NOT NULL,
+  nickname VARCHAR(255),
+  email VARCHAR(255) NOT NULL,
+  area VARCHAR(255) NOT NULL,
+  age INT NOT NULL,
+  gender VARCHAR(10) NOT NULL, -- ENUM → VARCHARに変更！
+  remark VARCHAR(255),
+  is_deleted BOOLEAN NOT NULL DEFAULT FALSE -- TINYINT(1) → BOOLEAN に変更！
+);
+
+
+CREATE TABLE IF NOT EXISTS students_courses
+(
+  students_courses_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  studentId VARCHAR(36),
+  course_name VARCHAR(255) NOT NULL,
+  course_start_date TIMESTAMP NOT NULL,
+  end_date TIMESTAMP NOT NULL
+);
