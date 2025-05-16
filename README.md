@@ -46,15 +46,13 @@
 
 ## 工夫した点 / 苦労した点 / 学んだこと
 ### 工夫した点
-- Thymeleafフォームにおける非表示フィールド活用（isDeleted）
-- MyBatisとの整合性を意識したDTO設計とトランザクション制御
+- 論理削除の設定（isDeleted）
 
 ### 苦労した点
 - Controlle -> Service -> Repository の一連の流れを理解すること
 - テストコード作成でのMockito使用の初学習
 
 ### 学んだこと
-- MVC分離の重要性とController責務の最小化
 - テーブル定義とJavaクラス設計の一致性
 
 ## おわりに
