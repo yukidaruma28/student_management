@@ -51,21 +51,22 @@
   </insert>
 
   <!-- 受講生コース情報の新規登録 IDについては自動採番 -->
-  <insert id="students_courses" useGeneratedKeys="true" keyProperty="studentsCoursesId">
-    INSERT INTO student
+  <insert id="registerStudentCourse" useGeneratedKeys="true" keyProperty="studentsCoursesId">
+    INSERT INTO students_courses
     (
     studentId
     ,course_name
     ,course_start_date
     ,end_date
+    ,student_course_status
     )
     VALUES
     (
     #{studentId}
     ,#{courseName}
-    ,#{nickname}
     ,#{startDate}
     ,#{endDate}
+    ,#{studentCourseStatus}
     )
   </insert>
 
@@ -92,8 +93,66 @@
     UPDATE
       students_courses
     SET
-      course_name = #{courseName}
+      course_name = #{courseName},
+      student_course_status = #{studentCourseStatus}
     WHERE
       students_courses_id = #{studentsCoursesId}
   </update>
+
+  <!-- あらゆる条件における検索 -->
+  <select id="searchStudentAll" resultType="Map">
+    SELECT
+    s.studentId AS studentId,
+    s.name AS name,
+    sc.students_courses_id AS courseId,
+    sc.course_name AS courseName,
+    sc.course_start_date AS startDate,
+    sc.end_date AS endDate,
+    sc.student_course_status AS studentCourseStatus
+    FROM student s
+    INNER JOIN students_courses sc ON s.studentId = sc.studentId
+
+    <where>
+      <if test="student != null and student.name != null and student.name != ''">
+        AND s.name LIKE CONCAT('%', #{student.name}, '%')
+      </if>
+      <if test="student != null and student.furigana != null and student.furigana != ''">
+        AND s.furigana LIKE CONCAT('%', #{student.furigana}, '%')
+      </if>
+      <if test="student != null and student.nickname != null and student.nickname != ''">
+        AND s.nickname LIKE CONCAT('%', #{student.nickname}, '%')
+      </if>
+      <if test="student != null and student.email != null and student.email != ''">
+        AND s.email LIKE CONCAT('%', #{student.email}, '%')
+      </if>
+      <if test="student != null and student.area != null and student.area != ''">
+        AND s.area = #{student.area}
+      </if>
+      <if test="student != null and student.age != null">
+        AND s.age = #{student.age}
+      </if>
+      <if test="student != null and student.remark != null and student.remark != ''">
+        AND s.remark LIKE CONCAT('%', #{student.remark}, '%')
+      </if>
+      <if test="student != null and student.isDeleted != null">
+        AND s.is_deleted = #{student.isDeleted}
+      </if>
+
+      <if test="studentCourse != null and studentCourse.courseName != null and studentCourse.courseName != ''">
+        AND sc.course_name LIKE CONCAT('%', #{studentCourse.courseName}, '%')
+      </if>
+      <if test="studentCourse != null and studentCourse.studentCourseStatus != null and studentCourse.studentCourseStatus != ''">
+        AND sc.student_course_status = #{studentCourse.studentCourseStatus}
+      </if>
+      <if test="studentCourse != null and studentCourse.startDate != null">
+        AND sc.course_start_date &gt;= #{studentCourse.startDate}
+      </if>
+      <if test="studentCourse != null and studentCourse.endDate != null">
+        AND sc.end_date &lt;= #{studentCourse.endDate}
+      </if>
+    </where>
+
+    ORDER BY s.studentId
+
+  </select>
 </mapper>

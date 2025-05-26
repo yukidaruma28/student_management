@@ -6,12 +6,14 @@ import java.sql.Timestamp;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Schema(description = "受講生コース情報")
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 
 public class StudentCourse {
 
@@ -31,5 +33,8 @@ public class StudentCourse {
 
   @Schema(description = "受講終了予定日", example = "2026-08-01 00:00:00")
   private Timestamp endDate;
+
+  @Schema(description = "申込状況", example = "仮申込")
+  private String studentCourseStatus;
 
 }

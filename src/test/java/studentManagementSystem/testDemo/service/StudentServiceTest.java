@@ -59,7 +59,8 @@ class StudentServiceTest {
             "1",
             "Javaコース",
             Timestamp.valueOf("2025-08-01 00:00:00"),
-            Timestamp.valueOf("2026-08-01 00:00:00")
+            Timestamp.valueOf("2026-08-01 00:00:00"),
+            "仮申込"
         )
     );
 

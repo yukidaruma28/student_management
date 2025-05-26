@@ -5,12 +5,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import studentManagementSystem.testDemo.data.Student;
 import studentManagementSystem.testDemo.data.StudentCourse;
 import studentManagementSystem.testDemo.domain.StudentDetail;
+import studentManagementSystem.testDemo.domain.StudentSearchCondition;
 
 @MybatisTest
 class StudentRepositoryTest {
@@ -42,6 +44,30 @@ class StudentRepositoryTest {
 
     List<StudentCourse> actual = sut.searchStudentCourseList();
     assertThat(actual.size()).isEqualTo(20);
+
+  }
+
+  @Test
+  void 受講生の単一検索が行えること() {
+    Student student = new Student();
+    student.setName("田中 太郎");
+
+    StudentSearchCondition condition = new StudentSearchCondition();
+    condition.setStudent(student);
+
+    assertEquals("田中 太郎", condition.getStudent().getName());
+
+  }
+
+  @Test
+  void 受講生コース情報の単一検索が行えること() {
+    StudentCourse studentCourse = new StudentCourse();
+    studentCourse.setCourseName("Java基礎コース123");
+
+    StudentSearchCondition condition = new StudentSearchCondition();
+    condition.setStudentCourse(studentCourse);
+
+    assertEquals("Java基礎コース123", condition.getStudentCourse().getCourseName());
 
   }
 
@@ -102,7 +128,8 @@ class StudentRepositoryTest {
             "1",
             "iPSコース",
             Timestamp.valueOf("2022-02-02 00:00:00"),
-            Timestamp.valueOf("2023-02-02 00:00:00")
+            Timestamp.valueOf("2023-02-02 00:00:00"),
+            "仮申込"
         )
     );
 

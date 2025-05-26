@@ -3,6 +3,7 @@ package studentManagementSystem.testDemo.service;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,6 +11,7 @@ import studentManagementSystem.testDemo.Controller.converter.StudentConverter;
 import studentManagementSystem.testDemo.data.Student;
 import studentManagementSystem.testDemo.data.StudentCourse;
 import studentManagementSystem.testDemo.domain.StudentDetail;
+import studentManagementSystem.testDemo.domain.StudentSearchCondition;
 import studentManagementSystem.testDemo.repository.StudentRepository;
 
 /**
@@ -51,6 +53,10 @@ public class StudentService {
     Student student = repository.searchStudentOne(studentId);
     List<StudentCourse> studentCourse = repository.searchStudentCourse(student.getStudentId());
     return new StudentDetail(student, studentCourse);
+  }
+
+  public List<Map<String, Object>> searchStudentAll(StudentSearchCondition condition) {
+    return repository.searchStudentAll(condition);
   }
 
   /**

@@ -1,6 +1,7 @@
 package studentManagementSystem.testDemo.repository;
 
 import java.util.List;
+import java.util.Map;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
@@ -8,6 +9,8 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import studentManagementSystem.testDemo.data.Student;
 import studentManagementSystem.testDemo.data.StudentCourse;
+import studentManagementSystem.testDemo.domain.StudentDetail;
+import studentManagementSystem.testDemo.domain.StudentSearchCondition;
 
 /**
  * 受講生情報テーブルと受講生コース情報テーブルと紐づくRepositoryです
@@ -44,6 +47,9 @@ public interface StudentRepository {
    * @return 受講生IDに紐づく受講生コース情報
    */
   List<StudentCourse> searchStudentCourse(String studentId);
+
+  // あらゆる条件における検索
+  List<Map<String, Object>> searchStudentAll(StudentSearchCondition condition);
 
 
   /**
