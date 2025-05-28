@@ -11,7 +11,6 @@ import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import studentManagementSystem.testDemo.data.Student;
 import studentManagementSystem.testDemo.data.StudentCourse;
-import studentManagementSystem.testDemo.domain.StudentDetail;
 import studentManagementSystem.testDemo.domain.StudentSearchCondition;
 
 @MybatisTest
@@ -49,25 +48,50 @@ class StudentRepositoryTest {
 
   @Test
   void 受講生の単一検索が行えること() {
-    Student student = new Student();
-    student.setName("田中 太郎");
+    Student expected = new Student(
+        "1",
+        "田中 太郎",
+        "たなかたろう",
+        "タロー",
+        "taro@example",
+        "鹿児島",
+        20,
+        "男性",
+        "未経験転職するために、東京へ上京予定。",
+        false
+    );
 
-    StudentSearchCondition condition = new StudentSearchCondition();
-    condition.setStudent(student);
+    StudentCourse studentName = new StudentCourse();
 
-    assertEquals("田中 太郎", condition.getStudent().getName());
+    StudentSearchCondition studentSearchCondition = new StudentSearchCondition();
+    studentSearchCondition.setStudentCourse(studentName);
+
+    List<Map<String, Object>> studentCourseName = sut.searchStudentAll(studentSearchCondition);
+    List<String> actual = studentCourseName.stream()
+        .map(map -> map.get("NAME").toString())
+        .toList();
+
+    assertEquals(expected.getName(), actual.get(0));
 
   }
 
   @Test
   void 受講生コース情報の単一検索が行えること() {
+    List<String> expected = List.of("Java基礎コース123");
+
     StudentCourse studentCourse = new StudentCourse();
     studentCourse.setCourseName("Java基礎コース123");
 
-    StudentSearchCondition condition = new StudentSearchCondition();
-    condition.setStudentCourse(studentCourse);
+    StudentSearchCondition studentSearchCondition = new StudentSearchCondition();
+    studentSearchCondition.setStudentCourse(studentCourse);
 
-    assertEquals("Java基礎コース123", condition.getStudentCourse().getCourseName());
+    List<Map<String, Object>> studentCourseName = sut.searchStudentAll(studentSearchCondition);
+    List<String> actual = studentCourseName.stream()
+        .map(map -> map.get("COURSENAME").toString())
+        .toList();
+
+    assertEquals(expected, actual);
+    System.out.println(studentCourseName);
 
   }
 
