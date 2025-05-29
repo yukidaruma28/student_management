@@ -13,6 +13,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import java.util.Arrays;
+import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
@@ -29,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import studentManagementSystem.testDemo.data.StudentCourse;
 import studentManagementSystem.testDemo.domain.StudentDetail;
+import studentManagementSystem.testDemo.domain.StudentSearchCondition;
 import studentManagementSystem.testDemo.exception.ErrorMessages;
 import studentManagementSystem.testDemo.exception.TestException;
 import studentManagementSystem.testDemo.service.StudentService;
@@ -94,6 +96,11 @@ public class StudentController {
   public StudentDetail getStudent(
       @PathVariable @NotBlank @Pattern(regexp = "^\\d+$") String studentId) {
     return service.searchStudent(studentId);
+  }
+
+  @PostMapping("/students/search")
+  public List<Map<String, Object>> searchStudentAll(@RequestBody StudentSearchCondition condition) {
+    return service.searchStudentAll(condition);
   }
 
   /**

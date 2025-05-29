@@ -48,22 +48,26 @@
     <br>
   </div>
 
-  <div th:each="course, stat : *{studentCours}">
-<!--    動画講座内のコード-->
-<!--    <label for="studentsCoursesId"-->
-<!--           th:for="studentCours.__${stat.index}__.courseName">受講コースID</label>-->
-<!--    <input type="text" id="studentsCoursesId" th:id="studentCours.__${stat.index}__.studentsCoursesId"-->
-<!--           th:field="*{studentCours[__${stat.index}__].studentsCoursesId}">-->
-
-<!--    hiddenにして、IDを隠しつつ、取得した-->
+  <div th:each="course, stat : *{studentCourseList}">
     <input type="hidden" id="studentsCoursesId"
-           th:id="studentCours.__${stat.index}__.studentsCoursesId"
-           th:field="*{studentCours[__${stat.index}__].studentsCoursesId}">
+           th:id="studentCourse.__${stat.index}__.studentsCoursesId"
+           th:field="*{studentCourse[__${stat.index}__].studentsCoursesId}">
 
     <label for="courseName"
-           th:for="studentCours.__${stat.index}__.courseName">受講コース名</label>
-    <input type="text" id="courseName" th:id="studentCours.__${stat.index}__.courseName"
-           th:field="*{studentCours[__${stat.index}__].courseName}">
+           th:for="studentCourse.__${stat.index}__.courseName">受講コース名</label>
+    <input type="text" id="courseName" th:id="studentCourse.__${stat.index}__.courseName"
+           th:field="*{studentCourse[__${stat.index}__].courseName}">
+
+    <label th:for="studentCourse.__${stat.index}__.studentCourseStatus">申込状況</label>
+    <label>
+      <select th:field="*{studentCourse[__${stat.index}__].studentCourseStatus}">
+        <option value="仮申込">仮申込</option>
+        <option value="本申込">本申込</option>
+        <option value="受講中">受講中</option>
+        <option value="受講終了">受講終了</option>
+      </select>
+    </label>
+
   </div>
 
   <div>

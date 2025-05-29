@@ -18,5 +18,6 @@ CREATE TABLE IF NOT EXISTS students_courses
   studentId VARCHAR(36),
   course_name VARCHAR(255) NOT NULL,
   course_start_date TIMESTAMP NOT NULL,
-  end_date TIMESTAMP NOT NULL
+  end_date TIMESTAMP NOT NULL,
+  student_course_status VARCHAR(36) NOT NULL
 );

@@ -5,12 +5,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import studentManagementSystem.testDemo.data.Student;
 import studentManagementSystem.testDemo.data.StudentCourse;
-import studentManagementSystem.testDemo.domain.StudentDetail;
+import studentManagementSystem.testDemo.domain.StudentSearchCondition;
 
 @MybatisTest
 class StudentRepositoryTest {
@@ -42,6 +43,55 @@ class StudentRepositoryTest {
 
     List<StudentCourse> actual = sut.searchStudentCourseList();
     assertThat(actual.size()).isEqualTo(20);
+
+  }
+
+  @Test
+  void 受講生の単一検索が行えること() {
+    Student expected = new Student(
+        "1",
+        "田中 太郎",
+        "たなかたろう",
+        "タロー",
+        "taro@example",
+        "鹿児島",
+        20,
+        "男性",
+        "未経験転職するために、東京へ上京予定。",
+        false
+    );
+
+    StudentCourse studentName = new StudentCourse();
+
+    StudentSearchCondition studentSearchCondition = new StudentSearchCondition();
+    studentSearchCondition.setStudentCourse(studentName);
+
+    List<Map<String, Object>> studentCourseName = sut.searchStudentAll(studentSearchCondition);
+    List<String> actual = studentCourseName.stream()
+        .map(map -> map.get("NAME").toString())
+        .toList();
+
+    assertEquals(expected.getName(), actual.get(0));
+
+  }
+
+  @Test
+  void 受講生コース情報の単一検索が行えること() {
+    List<String> expected = List.of("Java基礎コース123");
+
+    StudentCourse studentCourse = new StudentCourse();
+    studentCourse.setCourseName("Java基礎コース123");
+
+    StudentSearchCondition studentSearchCondition = new StudentSearchCondition();
+    studentSearchCondition.setStudentCourse(studentCourse);
+
+    List<Map<String, Object>> studentCourseName = sut.searchStudentAll(studentSearchCondition);
+    List<String> actual = studentCourseName.stream()
+        .map(map -> map.get("COURSENAME").toString())
+        .toList();
+
+    assertEquals(expected, actual);
+    System.out.println(studentCourseName);
 
   }
 
@@ -102,7 +152,8 @@ class StudentRepositoryTest {
             "1",
             "iPSコース",
             Timestamp.valueOf("2022-02-02 00:00:00"),
-            Timestamp.valueOf("2023-02-02 00:00:00")
+            Timestamp.valueOf("2023-02-02 00:00:00"),
+            "仮申込"
         )
     );
 
