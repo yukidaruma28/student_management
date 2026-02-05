@@ -2,6 +2,7 @@ package studentManagementSystem.testDemo.Controller;
 
 import jakarta.validation.Valid;
 import java.util.ArrayList;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,11 +11,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import studentManagementSystem.testDemo.data.CourseMaster;
 import studentManagementSystem.testDemo.data.Gender;
 import studentManagementSystem.testDemo.data.Student;
 import studentManagementSystem.testDemo.data.StudentCourse;
 import studentManagementSystem.testDemo.domain.StudentDetail;
+import studentManagementSystem.testDemo.domain.StudentSearchCondition;
 import studentManagementSystem.testDemo.service.StudentService;
 
 /**
@@ -38,7 +39,14 @@ public class StudentViewController {
    */
   @GetMapping("/students")
   public String listStudents(Model model) {
+    // 検索フォーム用の空オブジェクトを追加
+    StudentSearchCondition searchCondition = new StudentSearchCondition();
+    searchCondition.setStudent(new Student());
+    searchCondition.setStudentCourse(new StudentCourse());
+
+    model.addAttribute("searchCondition", searchCondition);
     model.addAttribute("studentList", studentService.searchStudentList());
+    model.addAttribute("courseOptions", studentService.getActiveCourses());
     return "studentList";
   }
 
@@ -131,5 +139,33 @@ public class StudentViewController {
 
     studentService.updateStudent(studentDetail);
     return "redirect:/students";
+  }
+
+  /**
+   * 検索条件に基づいて受講生を検索します
+   *
+   * @param searchCondition 検索条件
+   * @param model モデル
+   * @return studentList.html
+   */
+  @PostMapping("/students/form-search")
+  public String searchStudents(
+      @ModelAttribute StudentSearchCondition searchCondition,
+      Model model) {
+
+    // 検索実行
+    List<StudentDetail> searchResults = studentService.searchStudentWithCondition(searchCondition);
+
+    // フォームの状態を保持するため、検索条件を再度渡す
+    model.addAttribute("searchCondition", searchCondition);
+    model.addAttribute("studentList", searchResults);
+    model.addAttribute("courseOptions", studentService.getActiveCourses());
+
+    // 検索結果が0件の場合のメッセージ
+    if (searchResults.isEmpty()) {
+      model.addAttribute("message", "検索条件に一致する受講生が見つかりませんでした。");
+    }
+
+    return "studentList";
   }
 }
