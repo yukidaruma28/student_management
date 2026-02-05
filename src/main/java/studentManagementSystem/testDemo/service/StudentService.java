@@ -3,7 +3,6 @@ package studentManagementSystem.testDemo.service;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,7 +54,13 @@ public class StudentService {
     return new StudentDetail(student, studentCourse);
   }
 
-  public List<Map<String, Object>> searchStudentAll(StudentSearchCondition condition) {
+  /**
+   * 検索条件に基づいて受講生を検索します
+   *
+   * @param condition 検索条件
+   * @return 検索条件に一致する受講生一覧
+   */
+  public List<Student> searchStudentAll(StudentSearchCondition condition) {
     return repository.searchStudentAll(condition);
   }
 

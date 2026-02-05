@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.sql.Timestamp;
 import java.util.List;
-import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,22 +27,8 @@ class StudentRepositoryTest {
 
   @Test
   void 受講生コースの全件検索が行えること() {
-    Student student = new Student(
-        "1",
-        "山田太郎",
-        "やまだたろう",
-        "タロー",
-        "taro@example",
-        "鹿児島",
-        20,
-        "男性",
-        "未経験転職するために、東京へ上京予定。",
-        false
-    );
-
     List<StudentCourse> actual = sut.searchStudentCourseList();
     assertThat(actual.size()).isEqualTo(20);
-
   }
 
   @Test
@@ -61,38 +46,48 @@ class StudentRepositoryTest {
         false
     );
 
-    StudentCourse studentName = new StudentCourse();
+    Student searchConditionStudent = new Student();
+    searchConditionStudent.setName("田中 太郎");
 
     StudentSearchCondition studentSearchCondition = new StudentSearchCondition();
-    studentSearchCondition.setStudentCourse(studentName);
+    studentSearchCondition.setStudent(searchConditionStudent);
 
-    List<Map<String, Object>> studentCourseName = sut.searchStudentAll(studentSearchCondition);
-    List<String> actual = studentCourseName.stream()
-        .map(map -> map.get("NAME").toString())
-        .toList();
+    List<Student> actual = sut.searchStudentAll(studentSearchCondition);
 
-    assertEquals(expected.getName(), actual.get(0));
+    assertThat(actual).hasSize(1);
+    Student actualStudent = actual.get(0);
 
+    assertThat(actualStudent.getStudentId()).isEqualTo(expected.getStudentId());
+    assertThat(actualStudent.getName()).isEqualTo(expected.getName());
+    assertThat(actualStudent.getFurigana()).isEqualTo(expected.getFurigana());
+    assertThat(actualStudent.getNickname()).isEqualTo(expected.getNickname());
+    assertThat(actualStudent.getEmail()).isEqualTo(expected.getEmail());
+    assertThat(actualStudent.getArea()).isEqualTo(expected.getArea());
+    assertThat(actualStudent.getAge()).isEqualTo(expected.getAge());
+    assertThat(actualStudent.getGender()).isEqualTo(expected.getGender());
+    assertThat(actualStudent.getRemark()).isEqualTo(expected.getRemark());
+    assertThat(actualStudent.getIsDeleted()).isEqualTo(expected.getIsDeleted());
   }
 
   @Test
   void 受講生コース情報の単一検索が行えること() {
-    List<String> expected = List.of("Java基礎コース123");
+    StudentCourse expected = new StudentCourse(
+        "1",
+        "1",
+        "Java基礎コース123",
+        Timestamp.valueOf("2022-01-01 00:00:00"),
+        Timestamp.valueOf("2023-01-01 00:00:00"),
+        "仮申込"
+    );
 
-    StudentCourse studentCourse = new StudentCourse();
-    studentCourse.setCourseName("Java基礎コース123");
+    List<StudentCourse> actual = sut.searchStudentCourse("1");
 
-    StudentSearchCondition studentSearchCondition = new StudentSearchCondition();
-    studentSearchCondition.setStudentCourse(studentCourse);
+    assertThat(actual).isNotEmpty();
+    StudentCourse actualCourse = actual.get(0);
 
-    List<Map<String, Object>> studentCourseName = sut.searchStudentAll(studentSearchCondition);
-    List<String> actual = studentCourseName.stream()
-        .map(map -> map.get("COURSENAME").toString())
-        .toList();
-
-    assertEquals(expected, actual);
-    System.out.println(studentCourseName);
-
+    assertThat(actualCourse.getStudentsCoursesId()).isEqualTo(expected.getStudentsCoursesId());
+    assertThat(actualCourse.getStudentId()).isEqualTo(expected.getStudentId());
+    assertThat(actualCourse.getCourseName()).isEqualTo(expected.getCourseName());
   }
 
   @Test

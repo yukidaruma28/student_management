@@ -100,17 +100,20 @@
   </update>
 
   <!-- あらゆる条件における検索 -->
-  <select id="searchStudentAll" resultType="Map">
-    SELECT
-    s.studentId AS studentId,
-    s.name AS name,
-    sc.students_courses_id AS courseId,
-    sc.course_name AS courseName,
-    sc.course_start_date AS startDate,
-    sc.end_date AS endDate,
-    sc.student_course_status AS studentCourseStatus
+  <select id="searchStudentAll" resultType="studentManagementSystem.testDemo.data.Student">
+    SELECT DISTINCT
+    s.studentId,
+    s.name,
+    s.furigana,
+    s.nickname,
+    s.email,
+    s.area,
+    s.age,
+    s.gender,
+    s.remark,
+    s.is_deleted
     FROM student s
-    INNER JOIN students_courses sc ON s.studentId = sc.studentId
+    LEFT JOIN students_courses sc ON s.studentId = sc.studentId
 
     <where>
       <if test="student != null and student.name != null and student.name != ''">

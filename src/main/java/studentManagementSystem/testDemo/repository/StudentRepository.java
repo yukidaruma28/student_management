@@ -1,15 +1,9 @@
 package studentManagementSystem.testDemo.repository;
 
 import java.util.List;
-import java.util.Map;
-import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Options;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
 import studentManagementSystem.testDemo.data.Student;
 import studentManagementSystem.testDemo.data.StudentCourse;
-import studentManagementSystem.testDemo.domain.StudentDetail;
 import studentManagementSystem.testDemo.domain.StudentSearchCondition;
 
 /**
@@ -48,8 +42,13 @@ public interface StudentRepository {
    */
   List<StudentCourse> searchStudentCourse(String studentId);
 
-  // あらゆる条件における検索
-  List<Map<String, Object>> searchStudentAll(StudentSearchCondition condition);
+  /**
+   * 検索条件に基づいて受講生を検索します
+   *
+   * @param condition 検索条件
+   * @return 検索条件に一致する受講生一覧
+   */
+  List<Student> searchStudentAll(StudentSearchCondition condition);
 
 
   /**
