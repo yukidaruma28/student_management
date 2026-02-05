@@ -16,6 +16,24 @@ VALUES
 ('村上 大地', 'むらかみ だいち', 'ダイチ', 'murakami.daichi@example.com', '北海道', 38, '男性', NULL, 0),
 ('山崎 恵子', 'やまざき けいこ', 'ケイさん', 'yamazaki.keiko@example.com', '愛知', 42, '女性', NULL, 0);
 
+INSERT INTO course_master (course_name, description, is_active) VALUES
+('Javaコース', 'Java基礎から応用まで', TRUE),
+('Webアプリ開発入門', 'Web開発の基礎', TRUE),
+('MySQL応用', 'データベース設計と最適化', TRUE),
+('Spring Boot超入門', 'Spring Bootフレームワーク入門', TRUE),
+('フロントエンド開発', 'HTML/CSS/JavaScript', TRUE),
+('ネットワーク基礎', 'ネットワークの基本概念', TRUE),
+('API設計と実践', 'RESTful API設計', TRUE),
+('セキュリティ基礎', 'Webセキュリティの基礎', TRUE),
+('クラウド基礎講座', 'AWSやGCPの基礎', TRUE),
+('DevOps実践', 'CI/CD構築', TRUE),
+('GitとGitHub入門', 'バージョン管理の基礎', TRUE),
+('JUnitテスト基礎', 'ユニットテストの書き方', TRUE),
+('デザインパターン入門', 'GoFデザインパターン', TRUE),
+('MySQLデータベース基礎', 'SQL基礎とDB操作', TRUE),
+('Java基礎コース', 'Java言語の基礎', TRUE),
+('Java基礎コース123', 'Java言語の基礎（旧）', TRUE);
+
 INSERT INTO students_courses (studentId, course_name, course_start_date, end_date, student_course_status)
 VALUES
 (1, 'Java基礎コース123', '2025-05-01 00:00:00', '2025-08-01 00:00:00', '仮申込'),

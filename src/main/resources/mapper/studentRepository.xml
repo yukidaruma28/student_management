@@ -64,8 +64,8 @@
     (
     #{studentId}
     ,#{courseName}
-    ,#{startDate}
-    ,#{endDate}
+    ,#{startDate, jdbcType=TIMESTAMP}
+    ,#{endDate, jdbcType=TIMESTAMP}
     ,#{studentCourseStatus}
     )
   </insert>
@@ -157,5 +157,20 @@
 
     ORDER BY s.studentId
 
+  </select>
+
+  <!-- 有効なコース一覧取得 (students_coursesから一意のコース名を取得) -->
+  <select id="getActiveCourses" resultType="studentManagementSystem.testDemo.data.CourseMaster">
+    SELECT
+      ROW_NUMBER() OVER (ORDER BY course_name) as courseId,
+      course_name as courseName,
+      NULL as description,
+      TRUE as isActive
+    FROM (
+      SELECT DISTINCT course_name
+      FROM students_courses
+      WHERE course_name IS NOT NULL AND course_name != ''
+    ) as distinct_courses
+    ORDER BY course_name
   </select>
 </mapper>

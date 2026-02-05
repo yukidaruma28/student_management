@@ -2,6 +2,7 @@ package studentManagementSystem.testDemo.repository;
 
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
+import studentManagementSystem.testDemo.data.CourseMaster;
 import studentManagementSystem.testDemo.data.Student;
 import studentManagementSystem.testDemo.data.StudentCourse;
 import studentManagementSystem.testDemo.domain.StudentSearchCondition;
@@ -80,4 +81,11 @@ public interface StudentRepository {
    * @param studentCourse 受講生コース情報
    */
   void updateStudentCourse(StudentCourse studentCourse);
+
+  /**
+   * 有効なコース一覧を取得します
+   *
+   * @return コースマスター一覧
+   */
+  List<CourseMaster> getActiveCourses();
 }

@@ -15,6 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import studentManagementSystem.testDemo.Controller.converter.StudentConverter;
+import studentManagementSystem.testDemo.data.Gender;
 import studentManagementSystem.testDemo.data.Student;
 import studentManagementSystem.testDemo.data.StudentCourse;
 import studentManagementSystem.testDemo.domain.StudentDetail;
@@ -48,7 +49,7 @@ class StudentServiceTest {
         "taro@example",
         "鹿児島",
         20,
-        "男性",
+        Gender.MALE,
         "未経験転職するために、東京へ上京予定。",
         false
     );

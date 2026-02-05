@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import studentManagementSystem.testDemo.Controller.converter.StudentConverter;
+import studentManagementSystem.testDemo.data.CourseMaster;
 import studentManagementSystem.testDemo.data.Student;
 import studentManagementSystem.testDemo.data.StudentCourse;
 import studentManagementSystem.testDemo.domain.StudentDetail;
@@ -106,5 +107,14 @@ public class StudentService {
     repository.updateStudent(studentDetail.getStudent());
     studentDetail.getStudentCourseList()
         .forEach(studentCourse -> repository.updateStudentCourse(studentCourse));
+  }
+
+  /**
+   * 有効なコース一覧を取得します
+   *
+   * @return コース一覧
+   */
+  public List<CourseMaster> getActiveCourses() {
+    return repository.getActiveCourses();
   }
 }

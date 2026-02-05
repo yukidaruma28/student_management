@@ -8,6 +8,7 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
+import studentManagementSystem.testDemo.data.Gender;
 import studentManagementSystem.testDemo.data.Student;
 import studentManagementSystem.testDemo.data.StudentCourse;
 import studentManagementSystem.testDemo.domain.StudentDetail;
@@ -31,7 +32,7 @@ class StudentConverterTest {
         "taro@example",
         "鹿児島",
         20,
-        "男性",
+        Gender.MALE,
         "未経験転職するために、東京へ上京予定。",
         false
     ));

@@ -41,8 +41,8 @@ public class Student {
   @Schema(description = "年齢", example = "20")
   private Integer age;
 
-  @Schema(description = "性別", example = "男性")
-  private String gender;
+  @Schema(description = "性別", example = "MALE")
+  private Gender gender;
 
   @Schema(description = "備考欄", example = "未経験転職するために、東京へ上京予定。")
   private String remark;

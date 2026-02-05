@@ -8,6 +8,7 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
+import studentManagementSystem.testDemo.data.Gender;
 import studentManagementSystem.testDemo.data.Student;
 import studentManagementSystem.testDemo.data.StudentCourse;
 import studentManagementSystem.testDemo.domain.StudentSearchCondition;
@@ -41,7 +42,7 @@ class StudentRepositoryTest {
         "taro@example",
         "鹿児島",
         20,
-        "男性",
+        Gender.MALE,
         "未経験転職するために、東京へ上京予定。",
         false
     );
@@ -100,7 +101,7 @@ class StudentRepositoryTest {
         "taro@example",
         "鹿児島",
         20,
-        "男性",
+        Gender.MALE,
         "未経験転職するために、東京へ上京予定。",
         false
     );
@@ -122,7 +123,7 @@ class StudentRepositoryTest {
         "taro@example",
         "鹿児島",
         20,
-        "男性",
+        Gender.MALE,
         "未経験転職するために、東京へ上京予定。",
         false
     );

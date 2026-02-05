@@ -5,7 +5,7 @@
 </head>
 <body>
 <h1>受講生詳細</h1>
-<form th:action="@{/updateStudent}" th:object="${studentDetail}" method="post">
+<form th:action="@{/update}" th:object="${studentDetail}" method="post">
 
   <div>
     <input type="hidden" th:field="*{student.studentId}" />
@@ -36,7 +36,12 @@
     <br>
 
     <label for="gender">性別：</label>
-    <input type="text" id="gender" th:field="*{student.gender}"  />
+    <select id="gender" th:field="*{student.gender}">
+      <option value="">選択してください</option>
+      <option th:each="gender : ${genderOptions}"
+              th:value="${gender}"
+              th:text="${gender.displayName}"></option>
+    </select>
     <br>
 
     <label for="remark">備考：</label>
@@ -50,17 +55,21 @@
 
   <div th:each="course, stat : *{studentCourseList}">
     <input type="hidden" id="studentsCoursesId"
-           th:id="studentCourse.__${stat.index}__.studentsCoursesId"
-           th:field="*{studentCourse[__${stat.index}__].studentsCoursesId}">
+           th:id="studentCourseList.__${stat.index}__.studentsCoursesId"
+           th:field="*{studentCourseList[__${stat.index}__].studentsCoursesId}">
 
-    <label for="courseName"
-           th:for="studentCourse.__${stat.index}__.courseName">受講コース名</label>
-    <input type="text" id="courseName" th:id="studentCourse.__${stat.index}__.courseName"
-           th:field="*{studentCourse[__${stat.index}__].courseName}">
+    <label th:for="studentCourseList.__${stat.index}__.courseName">受講コース名</label>
+    <select th:id="studentCourseList.__${stat.index}__.courseName"
+            th:field="*{studentCourseList[__${stat.index}__].courseName}">
+      <option value="">選択してください</option>
+      <option th:each="courseOption : ${courseOptions}"
+              th:value="${courseOption.courseName}"
+              th:text="${courseOption.courseName}"></option>
+    </select>
 
-    <label th:for="studentCourse.__${stat.index}__.studentCourseStatus">申込状況</label>
+    <label th:for="studentCourseList.__${stat.index}__.studentCourseStatus">申込状況</label>
     <label>
-      <select th:field="*{studentCourse[__${stat.index}__].studentCourseStatus}">
+      <select th:field="*{studentCourseList[__${stat.index}__].studentCourseStatus}">
         <option value="仮申込">仮申込</option>
         <option value="本申込">本申込</option>
         <option value="受講中">受講中</option>
