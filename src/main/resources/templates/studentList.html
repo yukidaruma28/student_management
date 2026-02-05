@@ -5,6 +5,7 @@
 </head>
 <body>
 <h1>受講生情報一覧</h1>
+<a href="/register" style="margin-bottom: 10px; display: inline-block;">新規登録</a>
 <table border="1">
   <thead>
   <tr>
@@ -24,8 +25,8 @@
   <tr th:each="studentDetail : ${studentList}">
     <td th:text="${studentDetail.student.studentId}">1</td>
     <td>
-      <a href="/studentList"
-         th:href="@{/student/{studentId}(studentId=${studentDetail.student.studentId})}"
+      <a href="/students/1"
+         th:href="@{/students/{studentId}(studentId=${studentDetail.student.studentId})}"
          th:text="${studentDetail.student.name}">山田太郎</a>
     </td>
     <td th:text="${studentDetail.student.furigana}">やまだたろう</td>

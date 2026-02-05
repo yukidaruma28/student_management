@@ -5,7 +5,15 @@
 </head>
 <body>
 <h1>受講生登録</h1>
-<form th:action="@{/registerStudent}" th:object="${studentDetail}" method="post">
+<form th:action="@{/register}" th:object="${studentDetail}" method="post">
+
+  <!-- エラーメッセージ表示 -->
+  <div th:if="${#fields.hasErrors('*')}" style="color: red; margin-bottom: 10px;">
+    <p>入力エラーがあります:</p>
+    <ul>
+      <li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
+    </ul>
+  </div>
 
   <div>
     <label for="name">名前：</label>
@@ -41,11 +49,11 @@
     <br>
   </div>
 
-  <div th:each="course, stat : *{studentCours}">
+  <div th:each="course, stat : *{studentCourseList}">
     <label for="courseName"
-           th:for="studentCours.__${stat.index}__.courseName">受講コース名</label>
-    <input type="text" id="courseName" th:id="studentCours.__${stat.index}__.courseName"
-           th:field="*{studentCours[__${stat.index}__].courseName}">
+           th:for="studentCourseList.__${stat.index}__.courseName">受講コース名</label>
+    <input type="text" id="courseName" th:id="studentCourseList.__${stat.index}__.courseName"
+           th:field="*{studentCourseList[__${stat.index}__].courseName}">
   </div>
 
   <div>

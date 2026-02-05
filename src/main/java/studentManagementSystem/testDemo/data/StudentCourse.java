@@ -6,11 +6,13 @@ import java.sql.Timestamp;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Schema(description = "受講生コース情報")
 @Getter
 @Setter
+@NoArgsConstructor
 @AllArgsConstructor
 
 public class StudentCourse {
