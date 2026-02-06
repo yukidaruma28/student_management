@@ -15,11 +15,14 @@ CREATE TABLE IF NOT EXISTS student (
 CREATE TABLE IF NOT EXISTS students_courses
 (
   students_courses_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  studentId VARCHAR(36),
+  studentId INT NOT NULL,
   select_courses VARCHAR(255) NOT NULL,
   start_date TIMESTAMP NOT NULL,
   end_date TIMESTAMP NOT NULL,
-  student_course_status VARCHAR(36) NOT NULL -- 旧カラム（後で削除予定）
+  student_course_status VARCHAR(36) NOT NULL, -- 旧カラム（後で削除予定）
+  FOREIGN KEY (studentId) REFERENCES student(studentId)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS course_master
@@ -37,4 +40,6 @@ CREATE TABLE IF NOT EXISTS application_status (
   students_courses_id INT NOT NULL,
   status VARCHAR(20) NOT NULL,
   FOREIGN KEY (students_courses_id) REFERENCES students_courses(students_courses_id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
 );
