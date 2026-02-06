@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import studentManagementSystem.testDemo.data.Student;
 import studentManagementSystem.testDemo.domain.StudentDetail;
@@ -47,6 +48,7 @@ import studentManagementSystem.testDemo.service.StudentService;
 })
 @Validated
 @RestController
+@RequestMapping("/api")
 public class StudentController {
 
   private StudentService service;

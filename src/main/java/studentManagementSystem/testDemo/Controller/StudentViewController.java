@@ -3,6 +3,8 @@ package studentManagementSystem.testDemo.Controller;
 import jakarta.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,6 +26,7 @@ import studentManagementSystem.testDemo.service.StudentService;
 @Controller
 public class StudentViewController {
 
+  private static final Logger log = LoggerFactory.getLogger(StudentViewController.class);
   private final StudentService studentService;
 
   @Autowired
@@ -89,7 +92,7 @@ public class StudentViewController {
 
     if (result.hasErrors()) {
       result.getAllErrors().forEach(error ->
-          System.err.println("Validation error: " + error.getDefaultMessage())
+          log.error("Validation error: {}", error.getDefaultMessage())
       );
       return "registerStudent";
     }
@@ -98,8 +101,7 @@ public class StudentViewController {
       studentService.registerStudent(studentDetail);
       return "redirect:/students";
     } catch (Exception e) {
-      System.err.println("Registration failed: " + e.getMessage());
-      e.printStackTrace();
+      log.error("Registration failed: {}", e.getMessage(), e);
       model.addAttribute("errorMessage", "登録に失敗しました: " + e.getMessage());
       return "registerStudent";
     }
