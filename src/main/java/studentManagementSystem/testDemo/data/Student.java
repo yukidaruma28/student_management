@@ -15,7 +15,6 @@ import lombok.ToString;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@NoArgsConstructor
 @ToString
 
 public class Student {
