@@ -159,18 +159,15 @@
 
   </select>
 
-  <!-- 有効なコース一覧取得 (students_coursesから一意のコース名を取得) -->
+  <!-- 有効なコース一覧取得 (course_masterテーブルから取得) -->
   <select id="getActiveCourses" resultType="studentManagementSystem.testDemo.data.CourseMaster">
     SELECT
-      ROW_NUMBER() OVER (ORDER BY select_courses) as courseId,
-      select_courses as courseName,
-      NULL as description,
-      TRUE as isActive
-    FROM (
-      SELECT DISTINCT select_courses
-      FROM students_courses
-      WHERE select_courses IS NOT NULL AND select_courses != ''
-    ) as distinct_courses
-    ORDER BY select_courses
+      course_id as courseId,
+      course_name as courseName,
+      description,
+      is_active as isActive
+    FROM course_master
+    WHERE is_active = TRUE
+    ORDER BY course_name
   </select>
 </mapper>

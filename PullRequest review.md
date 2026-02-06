@@ -1,106 +1,27 @@
-仕様
-  受講生情報の定義
-    ID
-      id
-    名前（フルネーム）
-      full_name
-    フリガナ
-      furigana
-    ニックネーム
-      nickname
-    メールアドレス
-      email
-    住んでいる地域（市区町村）
-      city_name
-    年齢
-      age
-    性別（トランスジェンダー考慮）
-      gender
-        https://qiita.com/aoshirobo/items/32deb45cb8c8b87d65a4
+課題合否判定：【条件付き合格】,
+判定理由
+機能追加（検索条件 + 申込状況）とそれに伴うDB/テンプレート/TypeHandler/テストの実装が一通り揃っており、単体テスト・テストデータも追加されているため機能要件は満たしていると判断します。ただし後期課題相当の品質基準から見ると修正してほしい点が残っているため「条件付き合格」とします。
 
+---
 
-  受講生コース情報の定義
-    ID
-      students_courses_id
-    受講生情報のID
-      id
-    コース名
-      select_courses
-    受講開始日 → 日付型
-      start_date
-    受講終了予定日 → 日付型
-      end_date
-  
-  申込状況の定義
-    ID
-    受講生コース情報のID
-    申込状況
+指摘事項
+【優先度：高】コントローラのURLの一貫性
+StudentViewController の showUpdateForm のマッピングを "/students/{id}" から "/student/{id}" に変更していますが、他の箇所（リンク・既存コード）との整合性を確認してください。ルーティング名の差異で既存画面やテストが壊れる可能性があります。関連する箇所を全検索して統一することを検討してください。,
+,
 
-  要件
-    受講生の個人情報が管理できること
-      受講生情報を検索、登録、更新、削除できること
-    受講生が何のコースを受けたかを管理できること
-      受講生コース情報を検索、登録、更新、削除できること
-    受講生と受講生コースは関連あり、複数コース受講を考慮すること
-      → 1:Nの関係
+【優先度：高】重複アノテーション（Student.java）
+Student クラスに @NoArgsConstructor が重複して付与されています。意図しない重複は可読性／保守性の低下やツール警告の原因になります。不要な重複を取り除いてください。,
+,
 
-    ※ コースに対して申込状況がわかること
-    各コースの申し込み状況が分かる機能
-      仮申し込み、本申し込み、受講中、受講終了の4つの状態が各コース単位でわかること
-      コースと申込状況は1:1の関係
-    
-    ※ 検索時は検索条件を指定して、様々な検索条件で受講生を検索できること
-    登録するときは、仮申し込みを確定で入れておく
-    更新するときは、仮申し込み〜受講終了が選択できるようにする
+【優先度：中】SQLの可搬性・実行環境依存
+mapper の getActiveCourses で ROW_NUMBER() OVER を使用しています（ウィンドウ関数）。MySQL のバージョンやテストDB（H2 等）によっては挙動が異なる／非対応の可能性があります。実行環境で問題が出ないか確認し、必要なら別実装（サブクエリ＋ユーザー側でID付与や、DBにコースマスタを正式に使う方法）を検討してください。,
+,
 
-  DB設計
-    テーブル構成
-    受講生
-    受講生コース
+【優先度：中】テンプレートの初期選択ロジック
+registerStudent.html の申込状況選択で option に selected 属性が直接入っています。Thymeleaf のバインディングで値を保持させる方が自然です（初期モデルがある場合はモデル値に依存する実装へ）。選択の初期化が期待通り動くか画面で確認してください。,
+,
 
-受講生情報：students
-受講生コース情報：students_courses
+---
 
-# 実装履歴
-
-## 2026-02-05: 性別とコース名のプルダウン化実装
-
-### 実装内容
-1. **性別（Gender）をEnumで実装**
-   - Gender.java を新規作成（MALE/FEMALE/OTHER）
-   - Student.java の gender フィールドを String → Gender 型に変更
-   - MyBatis が自動的に Enum ↔ String 変換を実行
-   - 表示名（男性、女性、その他）とEnum値を分離
-
-2. **コース名をマスターテーブルで実装**
-   - course_master テーブルを新規作成
-   - CourseMaster.java エンティティを新規作成
-   - Repository、Mapper、Service に getActiveCourses() メソッドを追加
-   - 14種類のコースをマスターデータとして登録
-
-3. **HTML テンプレートの修正**
-   - registerStudent.html: 性別とコース名を input → select に変更
-   - updateStudent.html: 性別とコース名を input → select に変更
-   - studentList.html: 性別表示を gender.displayName に修正
-
-4. **Controller の修正**
-   - StudentViewController に genderOptions と courseOptions を Model に追加
-   - 登録・更新フォーム両方で選択肢を提供
-
-5. **テストコードの更新**
-   - StudentRepositoryTest: 全ての Student インスタンスで Gender enum を使用
-   - StudentServiceTest: Gender enum に対応
-   - StudentConverterTest: Gender enum に対応
-
-### コンパイル確認
-- メインコード: ✅ 正常にコンパイル完了
-- テストコード: ✅ 正常にコンパイル完了
-
-### 既知の問題
-- Gradle 8.13 が JDK 24 と互換性がないため、`./gradlew test` が実行不可
-- 解決策: Java 17 または 21 にダウングレード、もしくは Gradle 8.14 以降にアップグレード
-
-### データベース互換性
-- **性別**: 既存データは "男性"、"女性"、"その他" として保存されており、そのまま互換性あり
-- **コース名**: 既存の students_courses テーブルは変更なし。course_master は新規追加のみ
-
+次のステップ
+上記高優先度の修正（URL整合性と重複アノテーション）を行い、修正後に再度PR更新をお願いします。

@@ -42,10 +42,19 @@ public class StudentService {
    * @return 受講生詳細一覧(全件)
    */
   public List<StudentDetail> searchStudentList() {
-  List<Student> stundentList = repository.searchStudent();
-  List<StudentCourse> studentCourseList = repository.searchStudentCourseList();
+    List<Student> studentList = repository.searchStudent();
+    List<StudentCourse> studentCourseList = repository.searchStudentCourseList();
 
-    return converter.convertStudentDetails(stundentList, studentCourseList);
+    // 各コースに申込状況を設定
+    studentCourseList.forEach(course -> {
+      List<ApplicationStatus> statusList = applicationStatusRepository
+          .findByStudentsCoursesId(course.getStudentsCoursesId());
+      if (!statusList.isEmpty()) {
+        course.setApplicationStatus(statusList.get(0));
+      }
+    });
+
+    return converter.convertStudentDetails(studentList, studentCourseList);
   }
 
   /**
