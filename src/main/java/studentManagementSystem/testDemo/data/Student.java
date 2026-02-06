@@ -23,7 +23,7 @@ public class Student {
   private String studentId;
 
   @Schema(description = "氏名", example = "山田太郎")
-  private String name;
+  private String fullName;
 
   @Schema(description = "ふりがな", example = "やまだたろう")
   private String furigana;
@@ -36,7 +36,7 @@ public class Student {
   private String email;
 
   @Schema(description = "地域", example = "兵庫")
-  private String area;
+  private String cityName;
 
   @Schema(description = "年齢", example = "20")
   private Integer age;

@@ -12,8 +12,8 @@
     <legend>検索条件</legend>
 
     <div style="margin-bottom: 10px;">
-      <label for="name">名前：</label>
-      <input type="text" id="name" th:field="*{student.name}" placeholder="部分一致" />
+      <label for="fullName">名前：</label>
+      <input type="text" id="fullName" th:field="*{student.fullName}" placeholder="部分一致" />
 
       <label for="furigana" style="margin-left: 20px;">ふりがな：</label>
       <input type="text" id="furigana" th:field="*{student.furigana}" placeholder="部分一致" />
@@ -23,8 +23,8 @@
     </div>
 
     <div style="margin-bottom: 10px;">
-      <label for="courseName">コース名：</label>
-      <select id="courseName" th:field="*{studentCourse.courseName}">
+      <label for="selectCourses">コース名：</label>
+      <select id="selectCourses" th:field="*{studentCourse.selectCourses}">
         <option value="">すべて</option>
         <option th:each="course : ${courseOptions}"
                 th:value="${course.courseName}"
@@ -80,18 +80,18 @@
     <td>
       <a href="/studentList"
          th:href="@{/student/{studentId}(studentId=${studentDetail.student.studentId})}"
-         th:text="${studentDetail.student.name}">山田太郎</a>
+         th:text="${studentDetail.student.fullName}">山田太郎</a>
     </td>
     <td th:text="${studentDetail.student.furigana}">やまだたろう</td>
     <td th:text="${studentDetail.student.nickname}">たろたろ</td>
     <td th:text="${studentDetail.student.email}">taro@example.com</td>
-    <td th:text="${studentDetail.student.area}">鹿児島</td>
+    <td th:text="${studentDetail.student.cityName}">鹿児島</td>
     <td th:text="${studentDetail.student.age}">43</td>
     <td th:text="${studentDetail.student.gender?.displayName}">男性</td>
     <td th:text="${studentDetail.student.remark}">特になし</td>
     <td>
       <span th:each="course, stat : ${studentDetail.studentCourseList}">
-        <span th:text="${course.courseName}">Java基礎コース</span>:
+        <span th:text="${course.selectCourses}">Java基礎コース</span>:
         <span th:text="${course.studentCourseStatus}">仮申込</span>
         <br th:if="${!stat.last}" />
       </span>

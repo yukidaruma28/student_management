@@ -10,8 +10,10 @@ import studentManagementSystem.testDemo.Controller.converter.StudentConverter;
 import studentManagementSystem.testDemo.data.CourseMaster;
 import studentManagementSystem.testDemo.data.Student;
 import studentManagementSystem.testDemo.data.StudentCourse;
+import studentManagementSystem.testDemo.data.ApplicationStatus;
 import studentManagementSystem.testDemo.domain.StudentDetail;
 import studentManagementSystem.testDemo.domain.StudentSearchCondition;
+import studentManagementSystem.testDemo.repository.ApplicationStatusRepository;
 import studentManagementSystem.testDemo.repository.StudentRepository;
 
 /**
@@ -22,11 +24,15 @@ import studentManagementSystem.testDemo.repository.StudentRepository;
 @Service
 public class StudentService {
   private StudentRepository repository;
+  private ApplicationStatusRepository applicationStatusRepository;
   private StudentConverter converter;
 
   @Autowired
-  public StudentService(StudentRepository repository, StudentConverter converter) {
+  public StudentService(StudentRepository repository,
+                        ApplicationStatusRepository applicationStatusRepository,
+                        StudentConverter converter) {
     this.repository = repository;
+    this.applicationStatusRepository = applicationStatusRepository;
     this.converter = converter;
   }
 
@@ -52,6 +58,16 @@ public class StudentService {
   public StudentDetail searchStudent(String studentId) {
     Student student = repository.searchStudentOne(studentId);
     List<StudentCourse> studentCourse = repository.searchStudentCourse(student.getStudentId());
+
+    // 各コースに申込状況を設定
+    studentCourse.forEach(course -> {
+      List<ApplicationStatus> statusList = applicationStatusRepository
+          .findByStudentsCoursesId(course.getStudentsCoursesId());
+      if (!statusList.isEmpty()) {
+        course.setApplicationStatus(statusList.get(0));
+      }
+    });
+
     return new StudentDetail(student, studentCourse);
   }
 
@@ -85,6 +101,16 @@ public class StudentService {
     return studentList.stream()
         .map(student -> {
           List<StudentCourse> courseList = repository.searchStudentCourse(student.getStudentId());
+
+          // 各コースに申込状況を設定
+          courseList.forEach(course -> {
+            List<ApplicationStatus> statusList = applicationStatusRepository
+                .findByStudentsCoursesId(course.getStudentsCoursesId());
+            if (!statusList.isEmpty()) {
+              course.setApplicationStatus(statusList.get(0));
+            }
+          });
+
           return new StudentDetail(student, courseList);
         })
         .toList();
@@ -106,13 +132,13 @@ public class StudentService {
 
     // Studentの検索条件チェック
     boolean isStudentEmpty = student == null ||
-        (isEmpty(student.getName()) &&
+        (isEmpty(student.getFullName()) &&
          isEmpty(student.getFurigana()) &&
          isEmpty(student.getEmail()));
 
     // StudentCourseの検索条件チェック
     boolean isCourseEmpty = course == null ||
-        (isEmpty(course.getCourseName()) &&
+        (isEmpty(course.getSelectCourses()) &&
          isEmpty(course.getStudentCourseStatus()));
 
     return isStudentEmpty && isCourseEmpty;
@@ -143,6 +169,15 @@ public class StudentService {
     studentDetail.getStudentCourseList().forEach(studentsCourses -> {
       initStudentsCourse(studentsCourses, student);
       repository.registerStudentCourse(studentsCourses);
+
+      // 申込状況を登録
+      if (studentsCourses.getStudentCourseStatus() != null) {
+        ApplicationStatus applicationStatus = new ApplicationStatus();
+        applicationStatus.setStudentsCoursesId(studentsCourses.getStudentsCoursesId());
+        applicationStatus.setStatus(studentsCourses.getStudentCourseStatus());
+        applicationStatusRepository.insert(applicationStatus);
+        studentsCourses.setApplicationStatus(applicationStatus);
+      }
     });
     return studentDetail;
   }
@@ -169,7 +204,17 @@ public class StudentService {
   public void updateStudent(StudentDetail studentDetail) {
     repository.updateStudent(studentDetail.getStudent());
     studentDetail.getStudentCourseList()
-        .forEach(studentCourse -> repository.updateStudentCourse(studentCourse));
+        .forEach(studentCourse -> {
+          repository.updateStudentCourse(studentCourse);
+
+          // 申込状況を更新
+          if (studentCourse.getApplicationStatus() != null &&
+              studentCourse.getApplicationStatus().getApplicationStatusId() != null) {
+            ApplicationStatus applicationStatus = studentCourse.getApplicationStatus();
+            applicationStatus.setStatus(studentCourse.getStudentCourseStatus());
+            applicationStatusRepository.update(applicationStatus);
+          }
+        });
   }
 
   /**

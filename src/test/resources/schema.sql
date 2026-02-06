@@ -1,10 +1,10 @@
 CREATE TABLE IF NOT EXISTS student (
   studentId INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  name VARCHAR(255) NOT NULL,
+  full_name VARCHAR(255) NOT NULL,
   furigana VARCHAR(255) NOT NULL,
   nickname VARCHAR(255),
   email VARCHAR(255) NOT NULL,
-  area VARCHAR(255) NOT NULL,
+  city_name VARCHAR(255) NOT NULL,
   age INT NOT NULL,
   gender VARCHAR(10) NOT NULL, -- ENUM → VARCHARに変更！
   remark VARCHAR(255),
@@ -16,10 +16,10 @@ CREATE TABLE IF NOT EXISTS students_courses
 (
   students_courses_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   studentId VARCHAR(36),
-  course_name VARCHAR(255) NOT NULL,
-  course_start_date TIMESTAMP NOT NULL,
+  select_courses VARCHAR(255) NOT NULL,
+  start_date TIMESTAMP NOT NULL,
   end_date TIMESTAMP NOT NULL,
-  student_course_status VARCHAR(36) NOT NULL
+  student_course_status VARCHAR(36) NOT NULL -- 旧カラム（後で削除予定）
 );
 
 CREATE TABLE IF NOT EXISTS course_master
@@ -30,4 +30,11 @@ CREATE TABLE IF NOT EXISTS course_master
   is_active BOOLEAN DEFAULT TRUE,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS application_status (
+  application_status_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  students_courses_id INT NOT NULL,
+  status VARCHAR(20) NOT NULL,
+  FOREIGN KEY (students_courses_id) REFERENCES students_courses(students_courses_id)
 );

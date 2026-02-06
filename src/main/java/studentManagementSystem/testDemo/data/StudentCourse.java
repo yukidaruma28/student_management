@@ -26,7 +26,7 @@ public class StudentCourse {
   private String studentId;
 
   @Schema(description = "受講コース名", example = "Javaコース")
-  private String courseName;
+  private String selectCourses;
 
   @Schema(description = "受講開始日", example = "2025-08-01 00:00:00")
   private Timestamp startDate;
@@ -36,5 +36,8 @@ public class StudentCourse {
 
   @Schema(description = "申込状況", example = "仮申込")
   private String studentCourseStatus;
+
+  @Schema(description = "申込状況オブジェクト")
+  private ApplicationStatus applicationStatus;
 
 }

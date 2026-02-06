@@ -1,4 +1,4 @@
-INSERT INTO student (name, furigana, nickname, email, area, age, gender, remark, is_deleted)
+INSERT INTO student (full_name, furigana, nickname, email, city_name, age, gender, remark, is_deleted)
 VALUES
 ('田中 太郎', 'たなか たろう', 'タロちゃん', 'tanaka.taro@example.com', '東京', 30, '男性', '', 1),
 ('鈴木 花子', 'すずき はなこ', 'はな', 'suzuki.hana@example.com', '神奈川', 299, '女性', '', 0),
@@ -34,7 +34,7 @@ INSERT INTO course_master (course_name, description, is_active) VALUES
 ('Java基礎コース', 'Java言語の基礎', TRUE),
 ('Java基礎コース123', 'Java言語の基礎（旧）', TRUE);
 
-INSERT INTO students_courses (studentId, course_name, course_start_date, end_date, student_course_status)
+INSERT INTO students_courses (studentId, select_courses, start_date, end_date, student_course_status)
 VALUES
 (1, 'Java基礎コース123', '2025-05-01 00:00:00', '2025-08-01 00:00:00', '仮申込'),
 (2, 'Webアプリ開発入門', '2025-05-10 00:00:00', '2025-09-10 00:00:00', '本申込'),
@@ -56,3 +56,8 @@ VALUES
 (18, 'Spring Boot超入門', '2025-07-15 00:00:00', '2025-11-15 00:00:00', '本申込'),
 (19, 'フロントエンド開発', '2025-08-01 00:00:00', '2025-11-30 00:00:00', '本申込'),
 (20, 'クラウド基礎講座', '2025-08-15 00:00:00', '2025-12-15 00:00:00', '仮申込');
+
+-- Migrate data to application_status table
+INSERT INTO application_status (students_courses_id, status)
+SELECT students_courses_id, student_course_status
+FROM students_courses;

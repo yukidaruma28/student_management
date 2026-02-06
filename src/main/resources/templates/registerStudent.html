@@ -8,8 +8,8 @@
 <form th:action="@{/register}" th:object="${studentDetail}" method="post">
 
   <div>
-    <label for="name">名前：</label>
-    <input type="text" id="name" th:field="*{student.name}" required />
+    <label for="fullName">名前：</label>
+    <input type="text" id="fullName" th:field="*{student.fullName}" required />
     <br>
 
     <label for="furigana">ふりがな：</label>
@@ -24,8 +24,8 @@
     <input type="text" id="email" th:field="*{student.email}" required />
     <br>
 
-    <label for="area">住所：</label>
-    <input type="text" id="area" th:field="*{student.area}" required />
+    <label for="cityName">住所：</label>
+    <input type="text" id="cityName" th:field="*{student.cityName}" required />
     <br>
 
     <label for="age">年齢：</label>
@@ -47,9 +47,9 @@
   </div>
 
   <div th:each="course, stat : *{studentCourseList}">
-    <label th:for="studentCourseList.__${stat.index}__.courseName">受講コース名</label>
-    <select th:id="studentCourseList.__${stat.index}__.courseName"
-            th:field="*{studentCourseList[__${stat.index}__].courseName}">
+    <label th:for="studentCourseList.__${stat.index}__.selectCourses">受講コース名</label>
+    <select th:id="studentCourseList.__${stat.index}__.selectCourses"
+            th:field="*{studentCourseList[__${stat.index}__].selectCourses}">
       <option value="">選択してください</option>
       <option th:each="courseOption : ${courseOptions}"
               th:value="${courseOption.courseName}"

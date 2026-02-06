@@ -48,7 +48,7 @@ class StudentRepositoryTest {
     );
 
     Student searchConditionStudent = new Student();
-    searchConditionStudent.setName("田中 太郎");
+    searchConditionStudent.setFullName("田中 太郎");
 
     StudentSearchCondition studentSearchCondition = new StudentSearchCondition();
     studentSearchCondition.setStudent(searchConditionStudent);
@@ -59,11 +59,11 @@ class StudentRepositoryTest {
     Student actualStudent = actual.get(0);
 
     assertThat(actualStudent.getStudentId()).isEqualTo(expected.getStudentId());
-    assertThat(actualStudent.getName()).isEqualTo(expected.getName());
+    assertThat(actualStudent.getFullName()).isEqualTo(expected.getFullName());
     assertThat(actualStudent.getFurigana()).isEqualTo(expected.getFurigana());
     assertThat(actualStudent.getNickname()).isEqualTo(expected.getNickname());
     assertThat(actualStudent.getEmail()).isEqualTo(expected.getEmail());
-    assertThat(actualStudent.getArea()).isEqualTo(expected.getArea());
+    assertThat(actualStudent.getCityName()).isEqualTo(expected.getCityName());
     assertThat(actualStudent.getAge()).isEqualTo(expected.getAge());
     assertThat(actualStudent.getGender()).isEqualTo(expected.getGender());
     assertThat(actualStudent.getRemark()).isEqualTo(expected.getRemark());
@@ -78,7 +78,8 @@ class StudentRepositoryTest {
         "Java基礎コース123",
         Timestamp.valueOf("2022-01-01 00:00:00"),
         Timestamp.valueOf("2023-01-01 00:00:00"),
-        "仮申込"
+        "仮申込",
+        null
     );
 
     List<StudentCourse> actual = sut.searchStudentCourse("1");
@@ -88,7 +89,7 @@ class StudentRepositoryTest {
 
     assertThat(actualCourse.getStudentsCoursesId()).isEqualTo(expected.getStudentsCoursesId());
     assertThat(actualCourse.getStudentId()).isEqualTo(expected.getStudentId());
-    assertThat(actualCourse.getCourseName()).isEqualTo(expected.getCourseName());
+    assertThat(actualCourse.getSelectCourses()).isEqualTo(expected.getSelectCourses());
   }
 
   @Test
@@ -136,7 +137,7 @@ class StudentRepositoryTest {
     sut.updateStudent(expected);
 
     assertNotEquals(expected, actual);
-    assertNotEquals(expected.getName(), actual.getName());
+    assertNotEquals(expected.getFullName(), actual.getFullName());
 
   }
 
@@ -149,7 +150,8 @@ class StudentRepositoryTest {
             "iPSコース",
             Timestamp.valueOf("2022-02-02 00:00:00"),
             Timestamp.valueOf("2023-02-02 00:00:00"),
-            "仮申込"
+            "仮申込",
+            null
         )
     );
 
