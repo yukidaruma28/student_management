@@ -13,6 +13,7 @@ import lombok.ToString;
 @Schema(description = "受講生")
 @Getter
 @Setter
+@NoArgsConstructor
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
