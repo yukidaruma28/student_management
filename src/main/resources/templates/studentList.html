@@ -79,7 +79,7 @@
     <td th:text="${studentDetail.student.studentId}">1</td>
     <td>
       <a href="/studentList"
-         th:href="@{/student/{studentId}(studentId=${studentDetail.student.studentId})}"
+         th:href="@{/students/{studentId}(studentId=${studentDetail.student.studentId})}"
          th:text="${studentDetail.student.fullName}">山田太郎</a>
     </td>
     <td th:text="${studentDetail.student.furigana}">やまだたろう</td>

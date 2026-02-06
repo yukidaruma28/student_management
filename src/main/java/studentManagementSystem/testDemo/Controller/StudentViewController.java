@@ -112,7 +112,7 @@ public class StudentViewController {
    * @param model モデル
    * @return updateStudent.html
    */
-  @GetMapping("/student/{id}")
+  @GetMapping("/students/{id}")
   public String showUpdateForm(@PathVariable("id") String id, Model model) {
     StudentDetail studentDetail = studentService.searchStudent(id);
     model.addAttribute("studentDetail", studentDetail);
