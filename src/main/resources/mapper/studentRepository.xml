@@ -26,11 +26,11 @@
   <insert id="registerStudent" useGeneratedKeys="true" keyProperty="studentId">
     INSERT INTO student
     (
-    name
+    full_name
     ,furigana
     ,nickname
     ,email
-    ,area
+    ,city_name
     ,age
     ,gender
     ,remark
@@ -38,11 +38,11 @@
     )
     VALUES
     (
-    #{name}
+    #{fullName}
     ,#{furigana}
     ,#{nickname}
     ,#{email}
-    ,#{area}
+    ,#{cityName}
     ,#{age}
     ,#{gender}
     ,#{remark}
@@ -51,21 +51,22 @@
   </insert>
 
   <!-- 受講生コース情報の新規登録 IDについては自動採番 -->
-  <insert id="students_courses" useGeneratedKeys="true" keyProperty="studentsCoursesId">
-    INSERT INTO student
+  <insert id="registerStudentCourse" useGeneratedKeys="true" keyProperty="studentsCoursesId">
+    INSERT INTO students_courses
     (
     studentId
-    ,course_name
-    ,course_start_date
+    ,select_courses
+    ,start_date
     ,end_date
+    ,student_course_status
     )
     VALUES
     (
     #{studentId}
-    ,#{courseName}
-    ,#{nickname}
-    ,#{startDate}
-    ,#{endDate}
+    ,#{selectCourses}
+    ,#{startDate, jdbcType=TIMESTAMP}
+    ,#{endDate, jdbcType=TIMESTAMP}
+    ,#{studentCourseStatus}
     )
   </insert>
 
@@ -74,11 +75,11 @@
     UPDATE
       student
     SET
-      name = #{name},
+      full_name = #{fullName},
       furigana = #{furigana},
       nickname = #{nickname},
       email = #{email},
-      area = #{area},
+      city_name = #{cityName},
       age = #{age},
       gender = #{gender},
       remark = #{remark},
@@ -92,8 +93,81 @@
     UPDATE
       students_courses
     SET
-      course_name = #{courseName}
+      select_courses = #{selectCourses},
+      student_course_status = #{studentCourseStatus}
     WHERE
       students_courses_id = #{studentsCoursesId}
   </update>
+
+  <!-- あらゆる条件における検索 -->
+  <select id="searchStudentAll" resultType="studentManagementSystem.testDemo.data.Student">
+    SELECT DISTINCT
+    s.studentId,
+    s.full_name,
+    s.furigana,
+    s.nickname,
+    s.email,
+    s.city_name,
+    s.age,
+    s.gender,
+    s.remark,
+    s.is_deleted
+    FROM student s
+    LEFT JOIN students_courses sc ON s.studentId = sc.studentId
+
+    <where>
+      <if test="student != null and student.fullName != null and student.fullName != ''">
+        AND s.full_name LIKE CONCAT('%', #{student.fullName}, '%')
+      </if>
+      <if test="student != null and student.furigana != null and student.furigana != ''">
+        AND s.furigana LIKE CONCAT('%', #{student.furigana}, '%')
+      </if>
+      <if test="student != null and student.nickname != null and student.nickname != ''">
+        AND s.nickname LIKE CONCAT('%', #{student.nickname}, '%')
+      </if>
+      <if test="student != null and student.email != null and student.email != ''">
+        AND s.email LIKE CONCAT('%', #{student.email}, '%')
+      </if>
+      <if test="student != null and student.cityName != null and student.cityName != ''">
+        AND s.city_name = #{student.cityName}
+      </if>
+      <if test="student != null and student.age != null">
+        AND s.age = #{student.age}
+      </if>
+      <if test="student != null and student.remark != null and student.remark != ''">
+        AND s.remark LIKE CONCAT('%', #{student.remark}, '%')
+      </if>
+      <if test="student != null and student.isDeleted != null">
+        AND s.is_deleted = #{student.isDeleted}
+      </if>
+
+      <if test="studentCourse != null and studentCourse.selectCourses != null and studentCourse.selectCourses != ''">
+        AND sc.select_courses LIKE CONCAT('%', #{studentCourse.selectCourses}, '%')
+      </if>
+      <if test="studentCourse != null and studentCourse.studentCourseStatus != null and studentCourse.studentCourseStatus != ''">
+        AND sc.student_course_status = #{studentCourse.studentCourseStatus}
+      </if>
+      <if test="studentCourse != null and studentCourse.startDate != null">
+        AND sc.start_date &gt;= #{studentCourse.startDate}
+      </if>
+      <if test="studentCourse != null and studentCourse.endDate != null">
+        AND sc.end_date &lt;= #{studentCourse.endDate}
+      </if>
+    </where>
+
+    ORDER BY s.studentId
+
+  </select>
+
+  <!-- 有効なコース一覧取得 (course_masterテーブルから取得) -->
+  <select id="getActiveCourses" resultType="studentManagementSystem.testDemo.data.CourseMaster">
+    SELECT
+      course_id as courseId,
+      course_name as courseName,
+      description,
+      is_active as isActive
+    FROM course_master
+    WHERE is_active = TRUE
+    ORDER BY course_name
+  </select>
 </mapper>

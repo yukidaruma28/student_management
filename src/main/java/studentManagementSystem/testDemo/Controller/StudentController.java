@@ -4,31 +4,25 @@ import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.info.Info;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
-import java.util.Arrays;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.ErrorResponse;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import studentManagementSystem.testDemo.data.StudentCourse;
+import studentManagementSystem.testDemo.data.Student;
 import studentManagementSystem.testDemo.domain.StudentDetail;
+import studentManagementSystem.testDemo.domain.StudentSearchCondition;
 import studentManagementSystem.testDemo.exception.ErrorMessages;
 import studentManagementSystem.testDemo.exception.TestException;
 import studentManagementSystem.testDemo.service.StudentService;
@@ -54,6 +48,7 @@ import studentManagementSystem.testDemo.service.StudentService;
 })
 @Validated
 @RestController
+@RequestMapping("/api")
 public class StudentController {
 
   private StudentService service;
@@ -94,6 +89,18 @@ public class StudentController {
   public StudentDetail getStudent(
       @PathVariable @NotBlank @Pattern(regexp = "^\\d+$") String studentId) {
     return service.searchStudent(studentId);
+  }
+
+  /**
+   * 検索条件に基づいて受講生を検索します
+   *
+   * @param condition 検索条件
+   * @return 検索条件に一致する受講生一覧
+   */
+  @Operation(summary = "条件検索", description = "検索条件に基づいて受講生を検索します")
+  @PostMapping("/students/search")
+  public List<Student> searchStudentAll(@RequestBody StudentSearchCondition condition) {
+    return service.searchStudentAll(condition);
   }
 
   /**

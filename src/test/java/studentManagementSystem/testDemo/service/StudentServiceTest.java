@@ -15,9 +15,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import studentManagementSystem.testDemo.Controller.converter.StudentConverter;
+import studentManagementSystem.testDemo.data.Gender;
 import studentManagementSystem.testDemo.data.Student;
 import studentManagementSystem.testDemo.data.StudentCourse;
 import studentManagementSystem.testDemo.domain.StudentDetail;
+import studentManagementSystem.testDemo.repository.ApplicationStatusRepository;
 import studentManagementSystem.testDemo.repository.StudentRepository;
 
 
@@ -28,6 +30,9 @@ class StudentServiceTest {
   private StudentRepository repository;
 
   @Mock
+  private ApplicationStatusRepository applicationStatusRepository;
+
+  @Mock
   private StudentConverter converter;
 
   private StudentService sut;
@@ -36,7 +41,7 @@ class StudentServiceTest {
   // メソッド全体でやりたいことは、先にまとめておく
   @BeforeEach
   void before() {
-    sut = new StudentService(repository, converter);
+    sut = new StudentService(repository, applicationStatusRepository, converter);
 
     // コンストラクタでの実装
     // 参考URL：https://efficientify.secret.jp/development/programming/%E3%80%90java%E5%85%A5%E9%96%80%E3%80%91java%E3%81%A7list%E3%82%92%E5%88%9D%E6%9C%9F%E5%8C%96%E3%81%99%E3%82%8B%E6%96%B9%E6%B3%95%EF%BC%9A%E5%88%9D%E5%BF%83%E8%80%85%E3%81%AB%E5%84%AA%E3%81%97/?utm_source=chatgpt.com
@@ -48,7 +53,7 @@ class StudentServiceTest {
         "taro@example",
         "鹿児島",
         20,
-        "男性",
+        Gender.MALE,
         "未経験転職するために、東京へ上京予定。",
         false
     );
@@ -59,7 +64,9 @@ class StudentServiceTest {
             "1",
             "Javaコース",
             Timestamp.valueOf("2025-08-01 00:00:00"),
-            Timestamp.valueOf("2026-08-01 00:00:00")
+            Timestamp.valueOf("2026-08-01 00:00:00"),
+            "仮申込",
+            null
         )
     );
 
