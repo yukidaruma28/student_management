@@ -32,7 +32,10 @@ jobs:
         PRIVATE_KEY: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
       run: |
         echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
-        scp -o StrictHostKeyChecking=no -i private_key ${{ env.SRC_PATH }} ${{ env.EC2_USER }}@${{ env.EC2_HOST }}:${{ env.DEST_PATH }}
+        echo "Testing SSH connection..."
+        ssh -v -o StrictHostKeyChecking=no -i private_key ${{ env.EC2_USER }}@${{ env.EC2_HOST }} "echo 'SSH connection successful'"
+        echo "Starting SCP..."
+        scp -v -o StrictHostKeyChecking=no -i private_key ${{ env.SRC_PATH }} ${{ env.EC2_USER }}@${{ env.EC2_HOST }}:${{ env.DEST_PATH }}
     
     - name: SSH Application Deploy
       uses: appleboy/ssh-action@master
